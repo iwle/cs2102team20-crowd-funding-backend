@@ -1,8 +1,7 @@
 CREATE TABLE Users (
 	user_id serial PRIMARY KEY,
 	email varchar(255) NOT NULL UNIQUE,
-	first_name varchar(255) NOT NULL,
-	last_name varchar(255) NOT NULL,
+	full_name varchar(255) NOT NULL,
   phone_number varchar(255) NOT NULL UNIQUE,
   password_hash varchar(255) NOT NULL
 );
