@@ -1,17 +1,41 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+const { Pool } = require("pg");
 
-router.post('/', function(req, res, next) {
-    var username = req.body.username;
-    var password = req.body.password;
-
-    console.log(`Got ${username} and ${password}`);
-
-    res.send('You are now logged in.');
+const pool = new Pool({
+  //   connectionString: process.env.DATABASE_URL
+  user: "postgres",
+  host: "localhost",
+  database: "postgres",
+  password: "password",
+  port: 5432
 });
 
-router.get('/', function(req, res, next) {
-    res.send("hi");
-})
+pool.connect();
+
+router.post("/", function(req, res, next) {
+  var email = req.body.email;
+  var password_hash = req.body.password_hash;
+
+  const query = `SELECT count(email) FROM Users WHERE Users.email = '${email}' AND Users.password_hash = '${password_hash}';`;
+
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.status(500).send("Internal Server Error.");
+    } else {
+      // There exists NO users entry with the given username and password.
+      if (data.rows[0].count === "0") {
+        res.status(404).send("Invalid User.");
+      } else {
+        // There exists a user entry with the given username and password.
+        res.send("Login Success.");
+      }
+    }
+  });
+});
+
+router.get("/", function(req, res, next) {
+  res.send("Unauthorized");
+});
 
 module.exports = router;
