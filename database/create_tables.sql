@@ -61,8 +61,7 @@ CREATE TABLE Searches (
 
 CREATE TABLE Wallets (
     user_id int REFERENCES Users(user_id) ON DELETE CASCADE,
-    amount numeric,
-    CONSTRAINT wallets_constraint PRIMARY KEY(user_id, amount)
+    amount numeric NOT NULL
 );
 
 CREATE TABLE Feedback (
