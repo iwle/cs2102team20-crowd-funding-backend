@@ -49,7 +49,8 @@ CREATE TABLE Creates (
 CREATE TABLE SearchHistory (
     search_timestamp timestamp,
     search_text varchar(255),
-    CONSTRAINT searchhistory_timestamp PRIMARY KEY(search_timestamp)
+    user_id int REFERENCES Users(user_id),
+    CONSTRAINT searchhistory_timestamp PRIMARY KEY(user_id, search_timestamp)
 );
 
 CREATE TABLE Searches (
