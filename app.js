@@ -78,6 +78,9 @@ app.use('/insert', insertRouter);
 
 app.use('/login', loginRouter);
 
+var categoriesRouter = require('./routes/categories');
+app.use('/categories', categoriesRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
