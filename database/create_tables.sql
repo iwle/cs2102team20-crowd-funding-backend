@@ -118,16 +118,16 @@ CREATE TABLE Feedback (
 
 CREATE TABLE Rewards (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
-    reward_threshold_amount numeric(20,2),
+    reward_name text,
+    reward_pledge_amount numeric(20,2),
     reward_description text,
     reward_tier_id int,
     CONSTRAINT
       project_tier_constraint1
-      UNIQUE(project_name, reward_threshold_amount),
+      UNIQUE(project_name, reward_name),
     CONSTRAINT
       project_tier_constraint2
       UNIQUE(project_name, reward_tier_id)
-
 );
 
 CREATE TABLE Updates (
