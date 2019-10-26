@@ -36,6 +36,7 @@ var insertRouter = require("./routes/insert");
 
 var loginRouter = require("./routes/login");
 var createRouter = require("./routes/create");
+var projectRouter = require("./routes/project");
 
 var app = express();
 
@@ -81,6 +82,7 @@ app.use("/insert", insertRouter);
 
 app.use("/login", loginRouter);
 app.use("/create", createRouter);
+app.use("/project", projectRouter);
 
 var categoriesRouter = require('./routes/categories');
 app.use('/categories', categoriesRouter);
