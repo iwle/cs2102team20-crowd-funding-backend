@@ -11,18 +11,12 @@ const pool = new Pool({
   port: 5432,
 })
 
-var sql_query = "SELECT * FROM "
 
 router.get('/', function(req, res, next) {
-    // pool.query(sql_query, (err, data) => {
-    //     res.send("Hi");
-    // })
-    res.send([
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { age: 38, first_name: 'Jami', last_name: 'Carney' }
-      ]);
+  var sql_query = "SELECT * FROM Projects WHERE false";
+  pool.query(sql_query, (err, data) => {
+    res.send(data)
+  });
 })
 
 module.exports = router;
