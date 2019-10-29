@@ -97,7 +97,7 @@ CREATE TABLE Searches (
 );
 
 CREATE TABLE Wallets (
-    email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
+    email varchar(255) REFERENCES Users(email) ON DELETE CASCADE UNIQUE,
     amount numeric NOT NULL
 );
 
