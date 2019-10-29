@@ -17,7 +17,7 @@ router.post("/", function(req, res, next) {
   var email = req.body.email;
   var password_hash = req.body.password_hash;
 
-  const query = `SELECT count(email) FROM Users WHERE Users.email = '${email}' AND Users.password_hash = '${password_hash}';`;
+  const query = `SELECT email, full_name, phone_number, amount FROM Users NATURAL JOIN Wallets WHERE email = '${email}' AND password_hash = '${password_hash}';`;
 
   pool.query(query, (error, data) => {
     if (error) {
@@ -28,7 +28,7 @@ router.post("/", function(req, res, next) {
         res.status(404).send("Invalid User.");
       } else {
         // There exists a user entry with the given username and password.
-        res.send("Login Success.");
+        res.send(data.rows[0]);
       }
     }
   });
