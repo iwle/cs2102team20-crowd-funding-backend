@@ -84,11 +84,14 @@ app.use("/login", loginRouter);
 app.use("/create", createRouter);
 app.use("/project", projectRouter);
 
-var categoriesRouter = require('./routes/categories');
-app.use('/categories', categoriesRouter);
+var categoriesRouter = require("./routes/categories");
+app.use("/categories", categoriesRouter);
 
-var projectsRouter = require('./routes/projects');
-app.use('/projects', projectsRouter);
+var projectsRouter = require("./routes/projects");
+app.use("/projects", projectsRouter);
+
+var walletRouter = require("./routes/wallet");
+app.use("/wallet", walletRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

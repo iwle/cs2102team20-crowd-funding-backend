@@ -136,6 +136,6 @@ CREATE TABLE Updates (
     update_time timestamp,
 
     CONSTRAINT
-      project_update_constraint
+      project_update_constraint1
       UNIQUE(update_time, project_name)
 );
