@@ -100,6 +100,43 @@ router.post("/:name/back", function(req, res) {
     })
 });
 
+router.get("/:name/like/:email", function(req, res) {
+    const query = `INSERT INTO likes VALUES ('${req.params.email}', '${req.params.name}')`;
+    console.log(query);
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when updating likes." + error);
+        } else {
+            res.status(200).send("Successfully added likes");
+        }
+    });
+});
+
+router.get("/:name/unlike/:email", function(req, res) {
+    const query = `DELETE FROM likes WHERE email='${req.params.email}' AND project_name='${req.params.name}';`;
+
+    console.log(query);
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when inserting likes" + error);
+        } else {
+            res.status(200).send("Successfully deleted likes");
+        }
+    });
+});
+
+router.get("/:name/islike/:email", function(req, res) {
+    const query = `SELECT * FROM likes WHERE project_name='${req.params.name}' AND email='${req.params.email}';`;
+    console.log(query);
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when inserting likes" + error);
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+})
+
 
 
 module.exports = router;
