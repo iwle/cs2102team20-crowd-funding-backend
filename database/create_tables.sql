@@ -118,7 +118,7 @@ CREATE TABLE Feedback (
 
 CREATE TABLE Rewards (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
-    reward_name text,
+    reward_name varchar(255),
     reward_pledge_amount numeric(20,2),
     reward_description text,
     reward_tier_id int,
