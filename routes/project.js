@@ -35,6 +35,42 @@ router.get("/:name/rewards", function(req, res, next) {
     });
 });
 
+router.get("/:name/updates", function(req, res, next) {
+    const query = "SELECT * FROM updates WHERE project_name = " + "'" + req.params.name.split('_').join(' ') + "'";
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving project updates");
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+});
+
+router.get("/:name/comments", function(req, res, next) {
+    const query = "SELECT * FROM comments WHERE project_name = " + "'" + req.params.name.split('_').join(' ')
+        + "' ORDER BY comment_date DESC";
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving project updates");
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+});
+
+router.post("/:name/comments", function(req, res, next) {
+    const query = "INSERT INTO comments (project_name, comment_text, email) VALUES " +
+        "('" + req.body.projectName + "',$$" + req.body.newComment + "$$,'" + req.body.commenterEmail + "') RETURNING *";
+    pool.query(query, (error, data) => {
+        if (error) {
+            //res.status(500).send("Internal server error when retrieving project updates");
+            res.status(500).send(query);
+        } else {
+            res.status(200).send(data.rows[0]);
+        }
+    });
+});
+
 router.get("/:name/back/:email", function(req, res) {
     var project_name = req.params.name
     var email = req.params.email

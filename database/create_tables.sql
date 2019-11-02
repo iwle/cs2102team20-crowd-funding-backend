@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS Updates CASCADE;
 DROP TABLE IF EXISTS Rewards CASCADE;
-DROP TABLE IF EXISTS Feedback CASCADE;
+DROP TABLE IF EXISTS Feedbacks CASCADE;
+DROP TABLE IF EXISTS Comments CASCADE;
 DROP TABLE IF EXISTS Wallets CASCADE;
 DROP TABLE IF EXISTS Searches CASCADE;
 DROP TABLE IF EXISTS SearchHistory CASCADE;
@@ -30,7 +31,7 @@ CREATE TABLE Projects (
     project_deadline timestamp,
     project_category varchar(255),
     project_funding_goal integer ,
-    project_current_funding integer DEFAULT 0, 
+    project_current_funding integer DEFAULT 0,
     project_image_url varchar(255),
     email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
     CONSTRAINT positive_goal CHECK(project_funding_goal > 0)
@@ -101,19 +102,34 @@ CREATE TABLE Wallets (
     amount numeric NOT NULL
 );
 
-CREATE TABLE Feedback (
+CREATE TABLE Feedbacks (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
-    comment_text text,
+    feedback_text text,
     rating_number int,
     feedback_date timestamp,
     email varchar(255) REFERENCES Users(email),
 
     CONSTRAINT
         feedback_not_null
-        CHECK (comment_text IS NOT NULL OR rating_number IS NOT NULL),
+        CHECK (feedback_text IS NOT NULL OR rating_number IS NOT NULL),
     CONSTRAINT
         unique_user_to_project
         UNIQUE (email,project_name)
+);
+
+CREATE TABLE Comments (
+    project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
+    comment_text text,
+    comment_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    email varchar(255) REFERENCES Users(email),
+
+    CONSTRAINT
+        comment_not_null
+        CHECK (comment_text IS NOT NULL),
+
+    CONSTRAINT
+        unique_user_to_project_comment_date
+        UNIQUE (email,project_name, comment_date)
 );
 
 CREATE TABLE Rewards (
@@ -132,6 +148,7 @@ CREATE TABLE Rewards (
 
 CREATE TABLE Updates (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
+    update_title text,
     update_description text,
     update_time timestamp,
 
