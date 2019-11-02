@@ -23,18 +23,31 @@ router.post("/", function(req, res, next) {
   var projectRewards = req.body.projectRewards;
 
   /* --- Query: Insertion into Projects --- */
-  const queryProjects = "INSERT INTO projects (project_name, project_description, project_deadline, " +
-    "project_category, project_funding_goal, project_current_funding, project_image_url, email) VALUES ('" +
-    projectName + "', '" + projectDescription + "', '" + projectDeadline + "','" + projectCategory + "', '" +
-    projectFundingGoal + "', '0', '" + projectImageUrl + "', 'babi@example.com')";
+  const queryProjects = `INSERT INTO projects (project_name, project_description, project_deadline, "project_category, project_funding_goal, project_current_funding, project_image_url, email)
+    VALUES ('${projectName}', ${projectDescription}', '${projectDeadline}', '${projectCategory}', '${projectFundingGoal}',0,'${projectImageUrl}', 'test@test.com');`;
 
+
+  pool.query(queryProjects, (error, data) => {
+    if (error) {
+      res.status(500),send("Unable to create project");
+    } else {
+      res.status(200).send("Project created!");
+    }
+  });
+  
   /* --- Query: Insertion into Rewards --- */
-  var queryRewards = "INSERT INTO rewards (project_name, reward_name, reward_pledge_amount, reward_description, " +
-      "reward_tier_id) VALUES ";
   for (var i = 0; i < projectRewards.length; ) {
     let reward = projectRewards[i];
-    queryRewards += "('" + projectName + "','" + reward.rewardName + "','" + reward.rewardPledgeAmount +
-        "','" + reward.rewardDescription + "','" + ++i + "'),"
+    var queryRewards = `INSERT INTO rewards (project_name, reward_name, reward_pledge_amount, reward_description)
+      VALUES ('${projectName}', '${reward.rewardName}', '${reward.rewardPledgeAmount}, '${reward.rewardDescription}')`;
+
+    pool.query(queryRewards, (error, data) => {
+      if (error) {
+        res.status(500),send("Unable to create project");
+      } else {
+        res.status(200).send("Project created!");
+      }
+    });
   }
   queryRewards = queryRewards.substr(0, queryRewards.length - 1);
 
@@ -46,14 +59,6 @@ router.post("/", function(req, res, next) {
       queryRewards + ";" +
       "END; " +
       "$$ LANGUAGE plpgsql; select createProject();"
-
-  pool.query(finalQuery, (error, data) => {
-    if (error) {
-      res.status(500).send("Unable to create project.");
-    } else {
-      res.status(200).send("Project created !");
-    }
-  });
 
 });
 

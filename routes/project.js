@@ -62,16 +62,20 @@ router.get("/:name/back/:email/list", function(req, res) {
 });
 
 router.get('/:name/back/:email/list/headers', function(req, res, next) {
-    var sql_query = `SELECT transaction_id,  amount, transaction_date FROM backingfunds NATURAL JOIN TRANSACTIONS WHERE false`;
+    const sql_query = `SELECT transaction_id,  amount, transaction_date FROM backingfunds NATURAL JOIN TRANSACTIONS WHERE false`;
     pool.query(sql_query, (err, data) => {
       res.send(data)
     });
   })
 
 router.post('/:name/unback/:id', function(req, res, next) {
-    var sql_query = `DELETE FROM transactions WHERE transaction_id=${req.params.id}`;
+    console.log("Got a query");
+    const sql_query = `SELECT * FROM unbacks('${req.params.name}', '${req.body.user_email}', ${req.params.id});`
+    // const sql_query = `SELECT * FROM unbacks('${req.params.name}', '${user_email}', ${req.params.id})`;
+    console.log(sql_query);
     pool.query(sql_query, (error, data) => {
         if (error) {
+            console.log(error);
             res.status(500).send("Internal server error when executing SQL");
         } else {
             res.status(200).send();
@@ -82,8 +86,6 @@ router.post('/:name/unback/:id', function(req, res, next) {
 router.post("/:name/back", function(req, res) {
     var {user_email, project_backed_name, backs_amount} = req.body
     const query = `SELECT * FROM backs('${user_email}', '${project_backed_name}', ${backs_amount})`;
-
-    console.log(query)
     pool.query(query, (error, data) => {
         if (error) {
             res.status(500).send("Internal server error when updating the project." + error);
@@ -99,6 +101,8 @@ router.post("/:name/back", function(req, res) {
         }
     })
 });
+
+// Functions to deal with Likes
 
 router.get("/:name/like/:email", function(req, res) {
     const query = `INSERT INTO likes VALUES ('${req.params.email}', '${req.params.name}')`;
