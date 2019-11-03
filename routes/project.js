@@ -24,6 +24,21 @@ router.get("/:name", function(req, res, next) {
     });
 });
 
+router.get("/:name/backers", function(req, res, next) {
+    const query = "SELECT * FROM backingfunds WHERE project_name = " + "'" + req.params.name.split('_').join(' ') + "'";
+
+    console.log(query)
+
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving backers");
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+});
+
+
 router.get("/:name/rewards", function(req, res, next) {
     const query = "SELECT * FROM rewards WHERE project_name = " + "'" + req.params.name.split('_').join(' ') + "'";
     pool.query(query, (error, data) => {
