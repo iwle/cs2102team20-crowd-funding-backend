@@ -113,7 +113,7 @@ CREATE TABLE Feedbacks (
         feedback_not_null
         CHECK (feedback_text IS NOT NULL OR rating_number IS NOT NULL),
     CONSTRAINT
-        unique_user_to_project
+        unique_user_to_project1
         UNIQUE (email,project_name)
 );
 

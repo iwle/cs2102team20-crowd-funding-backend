@@ -144,3 +144,21 @@ AS $$ BEGIN
     END IF;
 END; $$
 LANGUAGE PLPGSQL;
+
+-- Function for registration
+CREATE OR REPLACE PROCEDURE register (
+    user_email varchar(255),
+    full_name varchar(255),
+    phone_number varchar(255),
+    password_hash varchar(255)
+) 
+AS $$ BEGIN 
+    INSERT INTO Users(email, full_name, phone_number, password_hash) VALUES (
+        user_email,full_name,phone_number,password_hash
+        );
+    INSERT INTO Wallets(email,amount) VALUES (user_email,0);
+    END;
+    $$
+    LANGUAGE PLPGSQL;
+
+

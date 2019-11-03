@@ -36,31 +36,48 @@ router.get("/", function(req, res, next) {
   });
 });
 
-router.post("/insert", function(req, res, next) {
+// router.post("/insert", function(req, res, next) {
+//   var name = req.body.name;
+//   var email = req.body.email;
+//   var contact = req.body.contact;
+//   var password = req.body.password;
+
+//   var query =
+//     "INSERT INTO Users(email, full_name, phone_number, password_hash) VALUES ('" +
+//     +"'" +
+//     name +
+//     "', '" +
+//     email +
+//     "', " +
+//     "'" +
+//     contact +
+//     "', " +
+//     "'" +
+//     password +
+//     "');";
+
+//   pool.query(query, (error, data) => {
+//     if (error) {
+//       res.send(query);
+//     } else {
+//       res.send("HELLOLLSL:Dkslasdasld");
+//     }
+//   });
+// });
+
+router.post("/register", function(req, res, next) {
   var name = req.body.name;
   var email = req.body.email;
   var contact = req.body.contact;
   var password = req.body.password;
 
-  var query =
-    "INSERT INTO Users(email, full_name, phone_number, password_hash) VALUES ('" +
-    +"'" +
-    name +
-    "', '" +
-    email +
-    "', " +
-    "'" +
-    contact +
-    "', " +
-    "'" +
-    password +
-    "');";
+  var query = `CALL register('${email}','${name}','${contact}','${password}')`;
 
   pool.query(query, (error, data) => {
     if (error) {
-      res.send(query);
+      res.send(error);
     } else {
-      res.send("HELLOLLSL:Dkslasdasld");
+      res.send("success");
     }
   });
 });
