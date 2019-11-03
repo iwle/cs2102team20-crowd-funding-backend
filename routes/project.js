@@ -35,6 +35,19 @@ router.get("/:name/rewards", function(req, res, next) {
     });
 });
 
+router.get("/backedRewards/:name/:email", function(req, res, next) {
+    const query = "SELECT reward_name FROM backingfunds WHERE project_name = " + "'"
+        + req.params.name.split('_').join(' ') + "' AND email = '" + req.params.email + "'";
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving backed rewards");
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+});
+
 router.get("/:name/updates", function(req, res, next) {
     const query = "SELECT * FROM updates WHERE project_name = " + "'" + req.params.name.split('_').join(' ') + "'";
     pool.query(query, (error, data) => {
@@ -106,6 +119,8 @@ router.post("/:name/comments", function(req, res, next) {
         }
     });
 });
+
+// Functions related to backing of a project
 
 router.get("/:name/back/:email", function(req, res) {
     var project_name = req.params.name
@@ -156,13 +171,35 @@ router.post('/:name/unback/:id', function(req, res, next) {
 });
 
 router.post("/:name/back", function(req, res) {
-    var {user_email, project_backed_name, backs_amount} = req.body
-    const query = `SELECT * FROM backs('${user_email}', '${project_backed_name}', ${backs_amount})`;
+    var {user_email, project_backed_name, reward_name, backs_amount} = req.body
+    // backs is a function to create transaction and backing funds entry
+    const query = `SELECT * FROM backs('${user_email}', '${project_backed_name}', '${reward_name}' , ${backs_amount})`;
     pool.query(query, (error, data) => {
         if (error) {
             res.status(500).send("Internal server error when updating the project." + error);
         } else {
             if (data.rows[0].backs) {
+                // Database check works.
+                res.status(200).send("Success");
+            } else {
+                // Database check fails.
+                res.status(200).send("Failure");
+            }
+            // res.status(200).send("Success");
+        }
+    })
+});
+
+router.post("/:name/unback", function(req, res) {
+    var {user_email, project_backed_name, reward_name} = req.body
+    // backs is a function to create transaction and backing funds entry
+    const query = `SELECT * FROM unbacks('${project_backed_name}', '${reward_name}' , '${user_email}')`;
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when updating the project." + error);
+        } else {
+            if (data.rows[0].unbacks) {
                 // Database check works.
                 res.status(200).send("Success");
             } else {

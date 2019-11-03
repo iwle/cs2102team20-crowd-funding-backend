@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS Searches CASCADE;
 DROP TABLE IF EXISTS SearchHistory CASCADE;
 DROP TABLE IF EXISTS Creates CASCADE;
 DROP TABLE IF EXISTS Transactions CASCADE;
-DROP TABLE IF EXISTS Backs CASCADE;
 DROP TABLE IF EXISTS Likes CASCADE;
 DROP TABLE IF EXISTS Follows CASCADE;
 DROP TABLE IF EXISTS Projects CASCADE;
@@ -37,6 +36,20 @@ CREATE TABLE Projects (
     CONSTRAINT positive_goal CHECK(project_funding_goal > 0)
 );
 
+CREATE TABLE Rewards (
+    project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
+    reward_name varchar(255) NOT NULL,
+    reward_pledge_amount numeric(20,2) DEFAULT 0,
+    reward_description text,
+    reward_tier_id int,
+    CONSTRAINT
+      project_tier_constraint1
+      UNIQUE(project_name, reward_name),
+    CONSTRAINT
+      project_tier_constraint2
+      UNIQUE(project_name, reward_tier_id)
+);
+
 CREATE TABLE Follows (
     follower_id varchar(255) REFERENCES Users(email),
     following_id varchar(255) REFERENCES Users(email),
@@ -52,7 +65,7 @@ CREATE TABLE Likes (
 CREATE TABLE Transactions (
     transaction_id serial PRIMARY KEY,
     amount numeric(20,2) NOT NULL,
-    transaction_date timestamp
+    transaction_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE TopUpFunds (
@@ -70,14 +83,17 @@ CREATE TABLE TransferFunds (
 CREATE TABLE BackingFunds(
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
     email varchar(255) REFERENCES Users(email),
-    project_name varchar(255) REFERENCES Projects(project_name)
+    project_name varchar(255),
+    reward_name varchar(255),
+    FOREIGN KEY (project_name, reward_name) REFERENCES Rewards(project_name, reward_name),
+    CONSTRAINT backingfunds_constrant UNIQUE(email, project_name, reward_name)
 );
 
 
 CREATE TABLE Creates (
     project_name varchar(255) REFERENCES Projects(project_name),
     email varchar(255) REFERENCES Users(email),
-    create_date timestamp NOT NULL,
+    create_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT creates_constraint PRIMARY KEY(email, project_name)
 );
 
@@ -130,20 +146,6 @@ CREATE TABLE Comments (
     CONSTRAINT
         unique_user_to_project_comment_date
         UNIQUE (email,project_name, comment_date)
-);
-
-CREATE TABLE Rewards (
-    project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
-    reward_name varchar(255),
-    reward_pledge_amount numeric(20,2),
-    reward_description text,
-    reward_tier_id int,
-    CONSTRAINT
-      project_tier_constraint1
-      UNIQUE(project_name, reward_name),
-    CONSTRAINT
-      project_tier_constraint2
-      UNIQUE(project_name, reward_tier_id)
 );
 
 CREATE TABLE Updates (

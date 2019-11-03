@@ -3,6 +3,7 @@
 CREATE OR REPLACE FUNCTION backs (
     user_email varchar(255),
     project_backed_name varchar(255),
+    reward_backed_name varchar(255),
     backs_amount numeric) RETURNS boolean
 AS $$
 DECLARE
@@ -23,8 +24,8 @@ BEGIN
             RETURNING transaction_id INTO backs_transaction_id;
         
         /* Insert new backing funds */
-        INSERT INTO BackingFunds (transaction_id, email, project_name) VALUES
-            (backs_transaction_id, user_email, project_backed_name);
+        INSERT INTO BackingFunds (transaction_id, email, project_name, reward_name) VALUES
+            (backs_transaction_id, user_email, project_backed_name, reward_backed_name);
 
         RETURN TRUE;
     ELSE
@@ -33,6 +34,7 @@ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
+/* Ian's version of unback
 CREATE OR REPLACE FUNCTION unbacks (
     project_backed_name varchar(255),
     user_email varchar(255),
@@ -70,6 +72,56 @@ BEGIN
     END IF;
     /* No need to insert into backingfunds */
 
+END; $$
+LANGUAGE PLPGSQL;
+*/
+
+/*
+    Raffles' version of unbacks function
+*/
+CREATE OR REPLACE FUNCTION unbacks (
+    project_backed_name varchar(255),
+    reward_backed_name varchar(255),
+    user_email varchar(255)) RETURNS boolean
+AS $$
+DECLARE
+    backed_transaction_id integer;
+BEGIN
+    /* Find previous transaction backing that is related to the project and reward intended to unback. */
+    DROP TABLE IF EXISTS old_transaction_backing;
+    CREATE TEMP TABLE old_transaction_backing AS
+    SELECT T.transaction_id, T.amount, B.email
+        FROM transactions AS T, backingfunds AS B
+        WHERE T.transaction_id = B.transaction_id
+            AND B.email = user_email
+            AND B.project_name = project_backed_name
+            AND B.reward_name = reward_backed_name;
+
+    /* Create new transaction */
+    /* Handle transfer of credit from project back to user */
+    UPDATE Wallets
+        SET amount = (SELECT W.amount + OT.amount FROM Wallets W, old_transaction_backing AS OT
+                        WHERE W.email = OT.email)
+        WHERE Wallets.email=user_email;
+
+    /* Reduce current funding displayed on Project */
+    UPDATE Projects
+        SET project_current_funding = (
+            SELECT P.project_current_funding - OT.amount
+            FROM projects AS P, old_transaction_backing AS OT
+            WHERE P.project_name = project_backed_name)
+        WHERE Projects.project_name = project_backed_name;
+
+    /* Remove from BackingFunds */
+    DELETE FROM BackingFunds
+        WHERE transaction_id = (SELECT transaction_id FROM old_transaction_backing);
+
+    /* Create new transaction for this unback action */
+    INSERT INTO Transactions (amount, transaction_date) VALUES
+        (((SELECT -OT.amount FROM old_transaction_backing AS OT))::numeric(20,2), current_timestamp);
+    RETURN true;
+
+    /* No need to insert into backingfunds */
 END; $$
 LANGUAGE PLPGSQL;
 

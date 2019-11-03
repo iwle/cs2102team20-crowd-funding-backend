@@ -1,6 +1,8 @@
 DELETE FROM users;
 DELETE FROM projects;
 DELETE FROM rewards;
+DELETE FROM updates;
+DELETE FROM comments;
 DELETE FROM wallets;
 
 INSERT INTO users
@@ -75,7 +77,12 @@ INSERT INTO comments
      'wait to receive it. Looks an incredible design.',
     '2019-06-02 13:00:56.874028', 'cabi@example.com');
 
-
 INSERT INTO wallets
     (email, amount) VALUES
-    ('test@test.com', 50);
+    ('abi@example.com', 4000),
+    ('babi@example.com', 6000),
+    ('test@test.com', 500000);
+
+-- Insert Transactions and Backings
+SELECT backs('test@test.com', 'Project 2', 'ART Piece - Lion', 5000);
+SELECT backs('test@test.com', 'Project 2', 'ART Piece - Cat', 3000);
