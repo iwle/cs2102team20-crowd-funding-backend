@@ -71,10 +71,11 @@ router.post("/register", function(req, res, next) {
   var contact = req.body.contact;
   var password = req.body.password;
 
-  var query = `CALL register('${email}','${name}','${contact}','${password}')`;
-
+  var query = `CALL register('${email}','${name}','${contact}','${password}');`;
+  console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
+      console.log(error);
       res.send(error);
     } else {
       res.send("success");

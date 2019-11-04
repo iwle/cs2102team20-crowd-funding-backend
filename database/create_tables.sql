@@ -21,7 +21,9 @@ CREATE TABLE Users (
 	email varchar(255) NOT NULL PRIMARY KEY,
 	full_name varchar(255) NOT NULL,
     phone_number varchar(255) NOT NULL UNIQUE,
-    password_hash varchar(255) NOT NULL
+    password_hash varchar(255) NOT NULL,
+    user_created_timestamp timestamp NOT NULL,
+    user_last_login_timestamp timestamp NOT NULL
 );
 
 CREATE TABLE Projects (
@@ -33,6 +35,7 @@ CREATE TABLE Projects (
     project_current_funding integer DEFAULT 0,
     project_image_url varchar(255),
     email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
+    project_created_timestamp timestamp NOT NULL,
     CONSTRAINT positive_goal CHECK(project_funding_goal > 0)
 );
 

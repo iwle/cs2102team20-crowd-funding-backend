@@ -5,26 +5,31 @@ DELETE FROM updates;
 DELETE FROM comments;
 DELETE FROM wallets;
 
-INSERT INTO users
-    (email, full_name, phone_number, password_hash) VALUES
-    ('abi@example.com', 'Abi Dabhi', '91919292', 'stringpass_abi'),
-    ('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi'),
-    ('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi'),
-    ('test@test.com', 'Test Man', '9', 'test');
+-- INSERT INTO users
+--     (email, full_name, phone_number, password_hash) VALUES
+--     ('abi@example.com', 'Abi Dabhi', '91919292', 'stringpass_abi'),
+--     ('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi'),
+--     ('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi'),
+--     ('test@test.com', 'Test Man', '9', 'test');
+
+CALL register('abi@example.com', 'Abi Dabhi', '91919292', 'stringpass_abi');
+CALL register('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi');
+CALL register('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi');
+CALL register('test@test.com', 'Test Man', '9', 'test');
 
 INSERT INTO projects
     (project_name, project_description, project_deadline,
         project_category, project_funding_goal, project_current_funding,
-        project_image_url, email) VALUES
+        project_image_url, email, project_created_timestamp) VALUES
     ('Project 1', 'A project that nobody really cares about.',
         '2019-10-15', 'Crafts', '45000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
-        'abi@example.com'),
+        'abi@example.com', localtimestamp - interval '3 days'),
     ('Project 2', 'A project that nobody really heard of.',
         '2019-12-30', 'Arts', '3000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
-        'babi@example.com'),
+        'babi@example.com', localtimestamp - interval '5 days'),
     ('Project 3', 'A project that nobody really want to use.',
         '2020-10-22', 'Electronics', '1000000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
-        'cabi@example.com');
+        'cabi@example.com', localtimestamp - interval '15 days');
 
 INSERT INTO rewards
     (project_name, reward_name, reward_pledge_amount, reward_description, reward_tier_id) VALUES
