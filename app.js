@@ -12,6 +12,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var projectRouter = require("./routes/projects");
+var searchRouter = require("./routes/search");
 
 /* --- V2: Adding Web Pages --- */
 var aboutRouter = require("./routes/about");
@@ -55,6 +56,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/projects", projectRouter);
+app.use("/search", searchRouter);
 
 /* --- V2: Adding Web Pages --- */
 app.use("/about", aboutRouter);

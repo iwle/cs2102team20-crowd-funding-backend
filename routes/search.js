@@ -11,18 +11,20 @@ const pool = new Pool({
 });
 
 // const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL
+// connectionString: process.env.DATABASE_URL
 // });
 
-router.get("/", function(req, res, next) {
-  var sql_query = "SELECT * FROM Projects";
-  pool.query(sql_query, (error, data) => {
+router.post("/", function(req, res, next) {
+  console.log("at login");
+  var email = req.body.email;
+  var search_text = req.body.search_text;
+  const query = `CALL search('${email}','${search_text}')`;
+  pool.query(query, (error, data) => {
     if (error) {
       res.send(error);
     } else {
-      res.send(data.rows);
+      res.send("success");
     }
   });
 });
-
 module.exports = router;
