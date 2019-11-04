@@ -25,10 +25,11 @@ router.post("/", function(req, res, next) {
 
   /* --- Query: Insertion into Projects --- */
   const queryProjects = "INSERT INTO projects (project_name, project_description, project_deadline, " +
-      "project_category, project_funding_goal, project_current_funding, project_image_url, email) VALUES ('" +
+      "project_category, project_funding_goal, project_current_funding, project_image_url, email, project_created_timestamp) VALUES ('" +
       projectName + "', '" + projectDescription + "', '" + projectDeadline + "','" + projectCategory + "', '" +
-      projectFundingGoal + "', '0', '" + projectImageUrl + "','" + creatorEmail + "')";
+      projectFundingGoal + "', '0', '" + projectImageUrl + "','" + creatorEmail + "', LOCALTIMESTAMP)";
 
+      console.log(queryProjects);
   /* --- Query: Insertion into Rewards --- */
   var queryRewards = "INSERT INTO rewards (project_name, reward_name, reward_pledge_amount, reward_description, " +
       "reward_tier_id) VALUES ";
@@ -40,14 +41,18 @@ router.post("/", function(req, res, next) {
   queryRewards = queryRewards.substr(0, queryRewards.length - 1);
 
   /* --- Final Query: Function to insert into Projects and Rewards. At the end, invoke function itself --- */
-  var finalQuery = "CREATE OR REPLACE FUNCTION createProject () " +
-      "RETURNS void AS $$ " +
-      "BEGIN " +
-      queryProjects + ";" +
-      queryRewards + ";" +
-      "END; " +
-      "$$ LANGUAGE plpgsql; select createProject();"
+  var finalQuery = `CREATE OR REPLACE FUNCTION createProject ()
+      RETURNS void AS $$
+      BEGIN 
+        ${queryProjects};
+        ${queryRewards};
+      END; $$
+      LANGUAGE plpgsql;
+      
 
+      select createProject();`
+
+    console.log(finalQuery);
   pool.query(finalQuery, (error, data) => {
     if (error) {
       res.status(500).send("Unable to create project.");
