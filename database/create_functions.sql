@@ -197,7 +197,7 @@ AS $$ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
--- Function for registration
+-- Procedure for registration
 CREATE OR REPLACE PROCEDURE register (
     user_email varchar(255),
     full_name varchar(255),
@@ -213,4 +213,19 @@ AS $$ BEGIN
     $$
     LANGUAGE PLPGSQL;
 
+-- Procedure for Search
+CREATE OR REPLACE PROCEDURE search (
+    user_email varchar(255),
+    search_text varchar(255)
+)
+AS $$ BEGIN
+    INSERT INTO SearchHistory(email,search_timestamp,search_text) VALUES (
+        user_email,LOCALTIMESTAMP,search_text
+    );
+    INSERT INTO Searches(email,search_timestamp) VALUES (
+        user_email,LOCALTIMESTAMP
+    );
 
+    END;
+    $$
+    LANGUAGE PLPGSQL;
