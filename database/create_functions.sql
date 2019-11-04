@@ -205,12 +205,10 @@ CREATE OR REPLACE PROCEDURE register (
     password_hash varchar(255)
 ) 
 AS $$ BEGIN 
-    INSERT INTO Users(email, full_name, phone_number, password_hash) VALUES (
-        user_email,full_name,phone_number,password_hash
-        );
+    INSERT INTO Users(email, full_name, phone_number, password_hash, user_created_timestamp, user_last_login_timestamp) VALUES (
+        user_email,full_name,phone_number,password_hash, LOCALTIMESTAMP, LOCALTIMESTAMP);
     INSERT INTO Wallets(email,amount) VALUES (user_email,0);
-    END;
-    $$
-    LANGUAGE PLPGSQL;
+END; $$
+LANGUAGE PLPGSQL;
 
 
