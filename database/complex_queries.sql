@@ -11,3 +11,12 @@ AS $$ BEGIN
         GROUP BY Q.project_name;
 END; $$
 LANGUAGE PLPGSQL;
+
+CREATE OR REPLACE FUNCTION get_earliest_date_fully_funded_project (varchar(255))
+    RETURNS timestamp
+AS $$
+    SELECT min_date
+        FROM earliest_dates_fully_funded() AS earliest_dates
+        WHERE earliest_dates.project_name = $1;
+$$
+LANGUAGE SQL;
