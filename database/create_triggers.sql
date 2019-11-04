@@ -29,7 +29,7 @@ BEGIN
     EXECUTE format('SELECT 1 FROM Projects P
         NATURAL JOIN Users U
         WHERE   P.email = ''%s''
-        AND     (LOCALTIMESTAMP - project_created_timestamp) >= interval ''%s days'';', $1, $2)
+        AND     (LOCALTIMESTAMP - project_created_timestamp) <= interval ''%s days'';', $1, $2)
     INTO _var;
     IF _var THEN
         RETURN true;
@@ -47,7 +47,7 @@ DECLARE
 BEGIN
     EXECUTE format('SELECT 1 FROM Users U
         WHERE   U.email = ''%s''
-        AND     (LOCALTIMESTAMP - user_last_login_timestamp) >= interval ''%s days'';', $1, $2)
+        AND     (LOCALTIMESTAMP - user_last_login_timestamp) <= interval ''%s days'';', $1, $2)
     INTO _var;
 
     IF _var THEN
@@ -66,7 +66,7 @@ DECLARE
 BEGIN
     EXECUTE format('SELECT 1 FROM Users U
         WHERE   U.email = ''%s''
-        AND     (LOCALTIMESTAMP - user_created_timestamp) >= interval ''%s days'';', $1, $2)
+        AND     (LOCALTIMESTAMP - user_created_timestamp) > interval ''%s days'';', $1, $2)
     INTO _var;
 
     IF _var THEN
