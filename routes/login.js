@@ -25,6 +25,7 @@ router.post("/", function(req, res, next) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
+      console.log(error)
       res.status(500).send("Internal Server Error.");
     } else {
       console.log(data.rows.length);
