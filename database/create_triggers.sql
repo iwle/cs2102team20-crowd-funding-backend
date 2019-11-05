@@ -51,9 +51,9 @@ BEGIN
     INTO _var;
 
     IF _var THEN
-        RETURN not true;
+        RETURN true;
     ELSE
-        RETURN not false;
+        RETURN false;
     END IF;
 END; $$
 LANGUAGE PLPGSQL;
