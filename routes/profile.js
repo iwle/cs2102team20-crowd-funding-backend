@@ -14,8 +14,24 @@ const pool = new Pool({
 pool.connect();
 
 /* Return all projects backed by the user. */
+router.get("/:email/createdProjects", function(req, res, next) {
+    const query = "SELECT * FROM Projects WHERE email = " + "'" + req.params.email + "'";
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving project");
+        } else {
+            res.status(200).send(data.rows);
+        }
+    });
+});
+
+/* Return all the projects created by the user. */
 router.get("/:email/backedProjects", function(req, res, next) {
-    const query = "SELECT * FROM projects WHERE email = " + "'" + req.params.email + "'";
+    const query = "Select * from projects P, " +
+        "(select DISTINCT project_name from backingfunds WHERE email = '" + req.params.email + "') AS BF " +
+        "WHERE P.project_name = BF.project_name";
+    ;
     console.log(query)
     pool.query(query, (error, data) => {
         if (error) {

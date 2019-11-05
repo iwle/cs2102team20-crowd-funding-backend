@@ -40,7 +40,7 @@ INSERT INTO projects
       'sed urna eget ullamcorper. Nam volutpat est libero, a vulputate lectus facilisis at. Pellentesque ' ||
        'habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam scelerisque ' ||
         'dolor sed mauris suscipit, id dapibus ipsum volutpat. In at bibendum sem. Duis id gravida enim.',
-        '2019-10-15', 'Crafts', '4500', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2019-10-15', 'Crafts', '4500', '0', 'https://picsum.photos/seed/spinning-table-top/200/200',
         'abi@example.com'),
     ('Animal Abstraction Canvas Painting', 'A project that nobody really heard of. ' ||
      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet bibendum nibh. Donec ' ||
@@ -52,7 +52,7 @@ INSERT INTO projects
            'commodo nunc, at consequat orci. Pellentesque a massa et orci pulvinar fermentum. Duis tincidunt ' ||
             'congue odio, ut auctor enim euismod a. Duis eget sagittis arcu. Praesent eget velit tristique, ' ||
              'viverra urna vel, euismod lacus.',
-        '2019-12-30', 'Arts', '3000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2019-12-30', 'Arts', '3000', '0', 'https://picsum.photos/seed/animal-abstraction-canvas-painting/200/200',
         'babi@example.com'),
     ('Medical Tissue Pro', 'Medical magical tissue is back! It is a product that nobody really want to use.' ||
       'It uses many variations of passages of Lorem Ipsum available, but the majority have suffered alteration ' ||
@@ -63,7 +63,7 @@ INSERT INTO projects
            '200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which ' ||
             'looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, ' ||
              'or non-characteristic words etc.',
-        '2020-10-22', 'Arts', '75300', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2020-10-22', 'Arts', '75300', '0', 'https://picsum.photos/seed/medical-tissue-pro/200/200',
         'cabi@example.com'),
     ('Headphone Jack For Iphone', 'Headphone jack is back! Jack is a product that nobody really want to use.' ||
       'It uses many variations of passages of Lorem Ipsum available, but the majority have suffered alteration ' ||
@@ -74,7 +74,7 @@ INSERT INTO projects
            '200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which ' ||
             'looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, ' ||
              'or non-characteristic words etc.',
-        '2020-10-22', 'Electronics', '10000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2020-10-22', 'Electronics', '10000', '0', 'https://picsum.photos/seed/headphone-jack-for-iphone/200/200',
         'cabi@example.com'),
     ('Book Boom Speaker', 'Boom Boom Speaker is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -85,7 +85,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2020-10-22', 'Electronics', '4000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2020-10-22', 'Electronics', '4000', '0', 'https://picsum.photos/seed/book-boom-speaker/200/200',
         'abi@example.com'),
     ('Clown of the Night', 'Clown is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -96,7 +96,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2020-10-22', 'Arts', '3000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2020-10-22', 'Arts', '3000', '0', 'https://picsum.photos/seed/clown-of-the-knight/200/200',
         'test@test.com'),
     ('Triathlete Mouse', 'Tri-mouse is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -107,7 +107,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2021-10-22', 'Electronics', '5000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        '2021-10-22', 'Electronics', '5000', '0', 'https://picsum.photos/seed/triathlete-mouse/200/200',
         'test@test.com');
 
 INSERT INTO rewards
