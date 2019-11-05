@@ -12,9 +12,9 @@ DELETE FROM wallets;
 --     ('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi'),
 --     ('test@test.com', 'Test Man', '9', 'test');
 
-CALL register('abi@example.com', 'Abi Dabhi', '91919292', 'stringpass_abi');
-CALL register('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi');
-CALL register('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi');
+CALL register('abi@example.com', 'Abi Dabhi', '91919292', 'stringpass_abi', localtimestamp - interval '34 days', localtimestamp - interval '2 days');
+CALL register('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi', localtimestamp - interval '37 days', localtimestamp - interval '2 days');
+CALL register('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi', localtimestamp - interval '38 days', localtimestamp - interval '2 days');
 CALL register('test@test.com', 'Test Man', '9', 'test');
 
 INSERT INTO projects
@@ -28,7 +28,7 @@ INSERT INTO projects
         '2019-12-30', 'Arts', '3000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
         'babi@example.com', localtimestamp - interval '5 days'),
     ('Project 3', 'A project that nobody really want to use.',
-        '2020-10-22', 'Electronics', '1000000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
+        localtimestamp - interval '10 days', 'Electronics', '1000000', '0', 'https://unsplash.com/photos/B1KFwtFFZl8',
         'cabi@example.com', localtimestamp - interval '15 days');
 
 INSERT INTO rewards

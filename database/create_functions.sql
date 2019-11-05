@@ -211,6 +211,21 @@ AS $$ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
+CREATE OR REPLACE PROCEDURE register (
+    user_email varchar(255),
+    full_name varchar(255),
+    phone_number varchar(255),
+    password_hash varchar(255),
+    user_created_timestamp timestamp,
+    user_last_login_timestamp timestamp
+) 
+AS $$ BEGIN 
+    INSERT INTO Users(email, full_name, phone_number, password_hash, user_created_timestamp, user_last_login_timestamp) VALUES (
+        user_email,full_name,phone_number,password_hash, user_created_timestamp, user_last_login_timestamp);
+    INSERT INTO Wallets(email,amount) VALUES (user_email,0);
+END; $$
+LANGUAGE PLPGSQL;
+
 -- Procedure for Search
 CREATE OR REPLACE PROCEDURE search (
     user_email varchar(255),
