@@ -242,3 +242,15 @@ AS $$ BEGIN
     END;
     $$
     LANGUAGE PLPGSQL;
+
+-- Procedure for createFeedback
+CREATE OR REPLACE PROCEDURE create_feedback (
+    name_of_project_receiving_feedback varchar(255),
+    feedback_value_text text,
+    num_of_rating integer,
+    feedbacker_email varchar(255))
+AS $$ BEGIN
+    INSERT INTO Feedbacks (project_name, feedback_text, rating_number, email) VALUES
+    (name_of_project_receiving_feedback, feedback_value_text, num_of_rating, feedbacker_email);
+END; $$
+LANGUAGE PLPGSQL;

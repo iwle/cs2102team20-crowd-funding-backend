@@ -38,6 +38,7 @@ var insertRouter = require("./routes/insert");
 var loginRouter = require("./routes/login");
 var createRouter = require("./routes/create");
 var projectRouter = require("./routes/project");
+var profileRouter = require("./routes/profile");
 
 var app = express();
 
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/projects", projectRouter);
+app.use("/profile", profileRouter);
 app.use("/search", searchRouter);
 
 /* --- V2: Adding Web Pages --- */

@@ -1,21 +1,20 @@
-DROP TABLE IF EXISTS Updates CASCADE;
-DROP TABLE IF EXISTS Rewards CASCADE;
-DROP TABLE IF EXISTS Feedbacks CASCADE;
+DROP TABLE IF EXISTS Backingfunds CASCADE;
 DROP TABLE IF EXISTS Comments CASCADE;
-DROP TABLE IF EXISTS Wallets CASCADE;
-DROP TABLE IF EXISTS Searches CASCADE;
-DROP TABLE IF EXISTS SearchHistory CASCADE;
 DROP TABLE IF EXISTS Creates CASCADE;
-DROP TABLE IF EXISTS Transactions CASCADE;
-DROP TABLE IF EXISTS Likes CASCADE;
+DROP TABLE IF EXISTS Feedbacks CASCADE;
 DROP TABLE IF EXISTS Follows CASCADE;
+DROP TABLE IF EXISTS Likes CASCADE;
 DROP TABLE IF EXISTS Projects CASCADE;
+DROP TABLE IF EXISTS Rewards CASCADE;
+DROP TABLE IF EXISTS Searches CASCADE;
+DROP TABLE IF EXISTS Searchhistory CASCADE;
+DROP TABLE IF EXISTS Topupfunds CASCADE;
+DROP TABLE IF EXISTS Transactions CASCADE;
+DROP TABLE IF EXISTS Transactions_Transaction_Id_Sq CASCADE;
+DROP TABLE IF EXISTS Transferfunds CASCADE;
+DROP TABLE IF EXISTS Updates CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
-
-DROP TABLE IF EXISTS TopUpFunds CASCADE;
-DROP TABLE IF EXISTS BackingFunds CASCADE;
-DROP TABLE IF EXISTS TransferFunds CASCADE;
-
+DROP TABLE IF EXISTS Wallets CASCADE;
 
 CREATE TABLE Users (
 	email varchar(255) NOT NULL PRIMARY KEY,
@@ -35,7 +34,7 @@ CREATE TABLE Projects (
     project_current_funding integer DEFAULT 0,
     project_image_url varchar(255),
     email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
-    project_created_timestamp timestamp NOT NULL,
+    project_created_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT positive_goal CHECK(project_funding_goal > 0)
 );
 
@@ -125,7 +124,7 @@ CREATE TABLE Feedbacks (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
     feedback_text text,
     rating_number int,
-    feedback_date timestamp,
+    feedback_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ,
     email varchar(255) REFERENCES Users(email),
 
     CONSTRAINT
