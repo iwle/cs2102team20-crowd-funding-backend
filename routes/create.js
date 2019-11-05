@@ -66,6 +66,7 @@ router.post("/", function(req, res, next) {
     console.log(finalQuery);
   pool.query(finalQuery, (error, data) => {
     if (error) {
+      console.log(error)
       res.status(500).send("Unable to create project.");
     } else {
       res.status(200).send("Project created !");
