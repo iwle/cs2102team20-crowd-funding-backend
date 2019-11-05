@@ -2,15 +2,15 @@
 CREATE OR REPLACE FUNCTION check_create_project () RETURNS trigger
 AS $$ BEGIN
     IF created_project_more_than_n_days(NEW.email, 3) THEN
-        RAISE EXCEPTION 'User % created project in last 3 days.', NEW.email; 
+        RAISE EXCEPTION 'User % created project in last 3 days.', NEW.email USING ERRCODE = 10001; 
     END IF;
 
     IF has_not_logged_in_past_n_days(NEW.email, 10) THEN
-        RAISE EXCEPTION 'User % has not logged in past 10 days.', NEW.email;
+        RAISE EXCEPTION 'User % has not logged in past 10 days.', NEW.email USING ERRCODE = 10002;
     END IF;
 
     IF has_not_created_in_past_n_days(NEW.email, 30) THEN
-        RAISE EXCEPTION 'User % had just been created in past 30 days.', NEW.email;
+        RAISE EXCEPTION 'User % had just been created in past 30 days.', NEW.email USING ERRCODE = 10003;
     END IF;
 
     RETURN NEW;
