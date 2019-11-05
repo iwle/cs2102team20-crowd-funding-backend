@@ -86,7 +86,7 @@ CREATE TABLE TransferFunds (
 CREATE TABLE BackingFunds(
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
     email varchar(255) REFERENCES Users(email),
-    project_name varchar(255),
+    project_name varchar(255) REFERENCES Projects(project_name),
     reward_name varchar(255),
     FOREIGN KEY (project_name, reward_name) REFERENCES Rewards(project_name, reward_name),
     CONSTRAINT backingfunds_constrant UNIQUE(email, project_name, reward_name)
