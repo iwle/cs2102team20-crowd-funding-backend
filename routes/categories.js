@@ -4,13 +4,13 @@ var router = express.Router();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  // connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL
 
-  user: "postgres",
-  host: "localhost",
-  database: "postgres",
-  password: "password",
-  port: 5432
+  // user: "postgres",
+  // host: "localhost",
+  // database: "postgres",
+  // password: "password",
+  // port: 5432
 });
 
 router.get("/headers", function(req, res, next) {

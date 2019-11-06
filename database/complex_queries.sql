@@ -1,20 +1,26 @@
 /*QUERY A Hyper funded projects
 1. more than 2 x its funding goal
-2. > 100 backers
-3. > 150 likes*/
-SELECT T1.project_name, T1.project_image_url, T1.creator, T1.liker, T2.email AS backer FROM
-(SELECT T1.project_name, T1.project_image_url,T1.email AS creator, T2.email AS Liker
-FROM Projects T1 INNER JOIN Likes T2 
-ON T1.project_current_funding >= 2 * T1.project_funding_goal
-AND T2.project_name = T1.project_name) T1 INNER JOIN BackingFunds T2 
-ON T1.project_name = T2.project_name;
-GROUP BY T1.project_name 
-HAVING COUNT(DISTINCT T1.liker) > 150 AND COUNT(DISTINCT T2.email) > 100; 
+2. >= 100 backers
+3. >= 150 likes*/
 
+SELECT T1.project_name, COUNT(DISTINCT T1.liker) as likes ,COUNT(DISTINCT T2.email) as backs FROM
+(SELECT T1.project_name, T1.project_image_url,T1.email AS creator, T2.email AS Liker
+FROM Projects T1 LEFT JOIN Likes T2 
+ON T1.project_current_funding >= 2 * T1.project_funding_goal
+AND T2.project_name = T1.project_name) T1 LEFT JOIN BackingFunds T2 
+ON T1.project_name = T2.project_name
+GROUP BY T1.project_name 
+HAVING COUNT(DISTINCT T1.liker) >= 150 AND COUNT(DISTINCT T2.email) >= 100; 
 
 /*QUERY B Hot users of the month LIMIT 3 
-1. > 100 followers WITHIN the last month
-2. > $1000 transactions made for ALL projects*/
+1. >= 100 followers
+2.  Contributed >= $1000 transactions made for ALL projects IN the past month*/
+
+SELECT * FROM getAllFollowers() as T1 where T1.followers > 0;
+SELECT * from BackingFunds;
+
+
+
 
 /*QUERY C Most creative 
 1. Has more than 5 projects

@@ -3,12 +3,12 @@ var router = express.Router();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  // connectionString: process.env.DATABASE_URL
-  user: "postgres",
-  host: "localhost",
-  database: "postgres",
-  password: "password",
-  port: 5432
+  connectionString: process.env.DATABASE_URL
+  // user: "postgres",
+  // host: "localhost",
+  // database: "postgres",
+  // password: "password",
+  // port: 5432
 });
 
 pool.connect();
@@ -29,17 +29,21 @@ router.get("/:name", function(req, res, next) {
 });
 
 router.get("/:name/backers", function(req, res, next) {
-    const query = "SELECT * FROM backingfunds WHERE project_name = " + "'" + req.params.name.split('_').join(' ') + "'";
+  const query =
+    "SELECT * FROM backingfunds WHERE project_name = " +
+    "'" +
+    req.params.name.split("_").join(" ") +
+    "'";
 
-    console.log(query)
+  console.log(query);
 
-    pool.query(query, (error, data) => {
-        if (error) {
-            res.status(500).send("Internal server error when retrieving backers");
-        } else {
-            res.status(200).send(data.rows);
-        }
-    });
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.status(500).send("Internal server error when retrieving backers");
+    } else {
+      res.status(200).send(data.rows);
+    }
+  });
 });
 
 router.get("/:name/rewards", function(req, res, next) {
@@ -50,7 +54,7 @@ router.get("/:name/rewards", function(req, res, next) {
     "'";
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send("Internal server error when retrieving project");
     } else {
       res.status(200).send(data.rows);
@@ -91,7 +95,7 @@ router.post("/:name/comments", function(req, res, next) {
     "') RETURNING *";
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       //res.status(500).send("Internal server error when retrieving project updates");
       res.status(500).send(query);
     } else {
@@ -108,7 +112,7 @@ router.get("/:name/updates", function(req, res, next) {
     "'";
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when retrieving project updates");
@@ -126,7 +130,7 @@ router.get("/:name/comments", function(req, res, next) {
     "' ORDER BY comment_date DESC";
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when retrieving project updates");
@@ -144,7 +148,7 @@ router.get("/:name/back/:email", function(req, res) {
   const query = `SELECT * FROM backingfunds WHERE project_name='${project_name}' AND email='${email}'`;
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send("Internal server error when executing SQL");
     } else {
       res.status(200).send(data.rows);
@@ -158,7 +162,7 @@ router.get("/:name/back/:email/list", function(req, res) {
   const query = `SELECT transaction_id, amount, transaction_date FROM backingfunds NATURAL JOIN TRANSACTIONS WHERE project_name='${project_name}' AND email='${email}'`;
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send("Internal server error when executing SQL");
     } else {
       res.status(200).send(data.rows);
@@ -196,7 +200,7 @@ router.post("/:name/back", function(req, res) {
   `;
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when updating the project." + error);
@@ -220,7 +224,7 @@ router.post("/:name/unback", function(req, res) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when updating the project." + error);
@@ -244,7 +248,7 @@ router.get("/:name/like/:email", function(req, res) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when updating likes." + error);
@@ -260,7 +264,7 @@ router.get("/:name/unlike/:email", function(req, res) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when inserting likes" + error);
@@ -275,7 +279,7 @@ router.get("/:name/islike/:email", function(req, res) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res
         .status(500)
         .send("Internal server error when inserting likes" + error);
