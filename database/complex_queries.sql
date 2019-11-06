@@ -68,7 +68,18 @@ RETURN QUERY
 END; $$
 LANGUAGE PLPGSQL;
 
+/* Fast funded projects: Projects that are fully funded within 2 weeks*/
+CREATE OR REPLACE FUNCTION fast_funded_projects()
+    RETURNS TABLE(project_name varchar(255), timetaken interval)
 
+AS $$ BEGIN
+    RETURN QUERY 
+    SELECT projects.project_name, LOCALTIMESTAMP - get_earliest_date_fully_funded_project(projects.project_name)
+    FROM projects WHERE (LOCALTIMESTAMP - get_earliest_date_fully_funded_project(projects.project_name)) <= interval '14 days';
+
+END; $$
+LANGUAGE PLPGSQL;
+  
 
 /* Find the earliest date that the project is fully funded before the deadline */
 CREATE OR REPLACE FUNCTION earliest_dates_fully_funded ()
@@ -86,13 +97,14 @@ LANGUAGE PLPGSQL;
 
 
 CREATE OR REPLACE FUNCTION get_earliest_date_fully_funded_project (varchar(255))
-    RETURNS TABLE(earliest_date timestamp) 
+    RETURNS timestamp
 AS $$
+DECLARE 
+earliest_date timestamp;
 BEGIN 
-
-RETURN QUERY
-    SELECT min_date  
+    SELECT MIN(min_date) INTO earliest_date
         FROM earliest_dates_fully_funded() AS earliest_dates
         WHERE earliest_dates.project_name = $1;
+        RETURN earliest_date;
 END $$
 LANGUAGE PLPGSQL;
