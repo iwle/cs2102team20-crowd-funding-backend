@@ -3,6 +3,11 @@
 2. >= 100 backers
 3. >= 150 likes*/
 
+CREATE OR REPLACE FUNCTION get_hyper_projects()
+    RETURNS TABLE(project varchar(255), likes bigint, backers bigint)
+AS $$ BEGIN
+RETURN QUERY 
+
 SELECT T1.project_name, COUNT(DISTINCT T1.liker) as likes ,COUNT(DISTINCT T2.email) as backs FROM
 (SELECT T1.project_name, T1.project_image_url,T1.email AS creator, T2.email AS Liker
 FROM Projects T1 LEFT JOIN Likes T2 
@@ -11,6 +16,10 @@ AND T2.project_name = T1.project_name) T1 LEFT JOIN BackingFunds T2
 ON T1.project_name = T2.project_name
 GROUP BY T1.project_name 
 HAVING COUNT(DISTINCT T1.liker) >= 100 AND COUNT(DISTINCT T2.email) >= 150; 
+
+END; $$
+LANGUAGE PLPGSQL;
+
 
 /*QUERY B Featured backers of the month (LIMIT 3) 
 1.  >= 100 followers
@@ -75,11 +84,15 @@ AS $$ BEGIN
 END; $$
 LANGUAGE PLPGSQL;
 
+
 CREATE OR REPLACE FUNCTION get_earliest_date_fully_funded_project (varchar(255))
-    RETURNS timestamp
+    RETURNS TABLE(earliest_date timestamp) 
 AS $$
-    SELECT min_date
+BEGIN 
+
+RETURN QUERY
+    SELECT min_date  
         FROM earliest_dates_fully_funded() AS earliest_dates
         WHERE earliest_dates.project_name = $1;
-$$
-LANGUAGE SQL;
+END $$
+LANGUAGE PLPGSQL;
