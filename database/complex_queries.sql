@@ -1,3 +1,29 @@
+/*QUERY A Hyper funded projects
+1. more than 2 x its funding goal
+2. > 100 backers
+3. > 150 likes*/
+SELECT T1.project_name, T1.project_image_url, T1.creator, T1.liker, T2.email AS backer FROM
+(SELECT T1.project_name, T1.project_image_url,T1.email AS creator, T2.email AS Liker
+FROM Projects T1 INNER JOIN Likes T2 
+ON T1.project_current_funding >= 2 * T1.project_funding_goal
+AND T2.project_name = T1.project_name) T1 INNER JOIN BackingFunds T2 
+ON T1.project_name = T2.project_name;
+GROUP BY T1.project_name 
+HAVING COUNT(DISTINCT T1.liker) > 150 AND COUNT(DISTINCT T2.email) > 100; 
+
+
+/*QUERY B Hot users of the month LIMIT 3 
+1. > 100 followers WITHIN the last month
+2. > $1000 transactions made for ALL projects*/
+
+/*QUERY C Most creative 
+1. Has more than 5 projects
+2. On average more than 500 likes
+3. Has more than 2 projects in 2 different categories*/
+
+
+
+
 /* Find the earliest date that the project is fully funded before the deadline */
 CREATE OR REPLACE FUNCTION earliest_dates_fully_funded ()
     RETURNS TABLE(project_name varchar(255), min_date timestamp)
