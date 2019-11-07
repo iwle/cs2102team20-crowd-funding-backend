@@ -63,8 +63,14 @@ router.post("/", function(req, res, next) {
       ++i +
       "'),";
   }
-  queryRewards +=
-    "('" + projectName + "', null ,'" + 0 + "', null,'" + ++i + "'),";
+    queryRewards +=
+        "('" +
+        projectName +
+        "', null ,'" +
+        0 +
+        "', null,'" +
+        ++i +
+        "'),";
   queryRewards = queryRewards.substr(0, queryRewards.length - 1);
 
   /* --- Final Query: Function to insert into Projects and Rewards. At the end, invoke function itself --- */
