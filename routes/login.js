@@ -3,12 +3,12 @@ var router = express.Router();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  //   connectionString: process.env.DATABASE_URL
-  user: "postgres",
-  host: "localhost",
-  database: "postgres",
-  password: "password",
-  port: 5432
+  connectionString: process.env.DATABASE_URL
+  // user: "postgres",
+  // host: "localhost",
+  // database: "postgres",
+  // password: "password",
+  // port: 5432
 });
 // const pool = new Pool({
 //   connectionString: process.env.DATABASE_URL
@@ -25,7 +25,7 @@ router.post("/", function(req, res, next) {
   console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send("Internal Server Error.");
     } else {
       console.log(data.rows.length);

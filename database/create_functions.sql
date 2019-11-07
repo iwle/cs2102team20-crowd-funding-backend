@@ -254,3 +254,15 @@ AS $$ BEGIN
     (name_of_project_receiving_feedback, feedback_value_text, num_of_rating, feedbacker_email);
 END; $$
 LANGUAGE PLPGSQL;
+
+-- Function to get number of followers
+CREATE OR REPLACE FUNCTION getAllFollowers()
+    RETURNS TABLE(user_id varchar(255), followers bigint)
+AS $$ BEGIN
+    RETURN QUERY
+     (SELECT T1.email, COUNT(DISTINCT follower_id) as followers from users T1 
+LEFT Join follows T2 on T1.email = T2.following_id
+GROUP BY T1.email);
+
+END; $$
+LANGUAGE PLPGSQL;
