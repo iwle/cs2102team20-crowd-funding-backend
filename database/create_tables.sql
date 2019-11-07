@@ -39,7 +39,7 @@ CREATE TABLE Projects (
 );
 
 CREATE TABLE Rewards (
-    project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
+    project_name varchar(255) REFERENCES Projects(project_name) ON UPDATE CASCADE ON DELETE CASCADE,
     reward_name varchar(255),
     reward_pledge_amount numeric(20,2) DEFAULT 0,
     reward_description text,

@@ -58,4 +58,53 @@ router.delete("/deleteCreatedProject/:email/:project_name", function(req, res, n
     });
 });
 
+router.get("/follows/:followerEmail/:followingEmail", function(req, res, next) {
+    const query = "SELECT * FROM Follows WHERE follower_id = " + "'" + req.params.followerEmail +
+        "' AND following_id = '" + req.params.followingEmail + "'";
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when retrieving project");
+        } else {
+            res.status(200).send(data.rows[0]);
+        }
+    });
+});
+
+router.post("/follows", function(req, res, next) {
+    const query =
+        "INSERT INTO Follows (follower_id, following_id) VALUES " +
+        "('" +
+        req.body.follower_id +
+        "','" +
+        req.body.following_id +
+        "') RETURNING *";
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            console.log(error);
+            //res.status(500).send("Internal server error when retrieving project updates");
+            res.status(500).send(query);
+        } else {
+            res.status(200).send(data.rows[0]);
+        }
+    });
+})
+
+/* Delete a project. */
+router.delete("/follows/:followerEmail/:followingEmail", function(req, res, next) {
+    const query = "DELETE FROM Follows " +
+        "WHERE follower_id = '" + req.params.followerEmail + "' AND " +
+        "following_id = '" + req.params.followingEmail + "'";
+    ;
+    console.log(query)
+    pool.query(query, (error, data) => {
+        if (error) {
+            res.status(500).send("Internal server error when unfollowing user.");
+        } else {
+            res.status(200).send("Unfollowed " + req.params.followingEmail);
+        }
+    });
+});
+
 module.exports = router;
