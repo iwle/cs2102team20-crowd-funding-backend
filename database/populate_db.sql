@@ -97,7 +97,7 @@ INSERT INTO projects
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
         '2020-10-22', 'Arts', '3000', '0', 'https://picsum.photos/seed/clown-of-the-knight/200/200',
-        'test@test.com');,
+        'test@test.com'),
     ('Triathlete Mouse', 'Tri-mouse is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
       'Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at ' ||
