@@ -217,6 +217,32 @@ router.post("/:name/back", function(req, res) {
   });
 });
 
+router.post("/:name/backNoReward", function(req, res) {
+  var { user_email, project_backed_name, backs_amount } = req.body;
+  // backs is a function to create transaction and backing funds entry
+  const query = `
+  SELECT * FROM backsNoReward('${user_email}', '${project_backed_name}', ${backs_amount})
+  `;
+  pool.query(query, (error, data) => {
+    if (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send("Internal server error when updating the project." + error);
+    } else {
+      // console.log(data.rows);
+      if (data.rows[0].backsnoreward) {
+        // Database check works.
+        res.status(200).send("Success");
+      } else {
+        // Database check fails.
+        res.status(200).send("Failure");
+      }
+      // res.status(200).send("Success");
+    }
+  });
+});
+
 router.post("/:name/unback", function(req, res) {
   var { user_email, project_backed_name, reward_name } = req.body;
   // backs is a function to create transaction and backing funds entry
