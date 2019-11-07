@@ -199,3 +199,30 @@ DROP TRIGGER IF EXISTS check_create_feedback ON Feedbacks;
 CREATE TRIGGER check_create_feedback BEFORE INSERT ON Feedbacks
     FOR EACH ROW EXECUTE PROCEDURE check_create_feedback();
 
+CREATE OR REPLACE FUNCTION check_backing () RETURNS TRIGGER
+AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM Projects P WHERE NEW.email = P.email AND NEW.project_name = P.project_name) THEN
+        RAISE EXCEPTION 'User % cannot back own project %', NEW.email, NEW.project_name;
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM Projects P WHERE NEW.project_name = P.project_name AND LOCALTIMESTAMP >= P.project_deadline) THEN
+        RAISE EXCEPTION 'Cannot back a project that is past its deadline.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM Transactions T WHERE NEW.transaction_id = T.transaction_id AND T.amount < 0) THEN
+        RAISE EXCEPTION 'Cannot back a project with < $0.';
+    END IF;
+
+    IF (SELECT NOT wallet_sufficient(NEW.email, T.amount) FROM Transactions T WHERE New.transaction_id = T.transaction_id) THEN
+        RAISE EXCEPTION 'Insufficient money in wallet for %.', NEW.email;
+    END IF;
+
+    RETURN NEW;
+
+END; $$
+LANGUAGE PLPGSQL;
+
+DROP TRIGGER IF EXISTS check_create_backingfund ON BackingFunds;
+CREATE TRIGGER  check_create_backingfund BEFORE INSERT ON BackingFunds
+    FOR EACH ROW EXECUTE PROCEDURE check_backing();
