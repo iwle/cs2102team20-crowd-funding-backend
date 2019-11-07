@@ -25,4 +25,26 @@ router.get("/", function(req, res, next) {
   });
 });
 
+router.get("/hyper", function(req, res, next) {
+  var sql_query = "SELECT * FROM get_hyper_projects();";
+  pool.query(sql_query, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data.rows);
+    }
+  });
+});
+
+router.get("/fastfund", function(req, res, next) {
+  var sql_query = "SELECT * FROM fast_funded_projects();";
+  pool.query(sql_query, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data.rows);
+    }
+  });
+});
+
 module.exports = router;

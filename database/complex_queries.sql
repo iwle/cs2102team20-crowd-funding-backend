@@ -108,3 +108,4 @@ BEGIN
         RETURN earliest_date;
 END $$
 LANGUAGE PLPGSQL;
+
