@@ -10,7 +10,6 @@ DELETE FROM Searches;
 DELETE FROM Searchhistory;
 DELETE FROM Topupfunds;
 DELETE FROM Transactions;
-DELETE FROM Transactions_Transaction_Id_Sq;
 DELETE FROM Transferfunds;
 DELETE FROM Updates;
 DELETE FROM Users;
@@ -33,14 +32,14 @@ UPDATE Wallets SET amount = 100000;
 
 INSERT INTO projects
     (project_name, project_description, project_deadline,
-        project_category, project_funding_goal, project_current_funding,
+        project_category, project_funding_goal,
         project_image_url, email) VALUES
     ('Spinning Table Top', 'A project that nobody really cares about. ' ||
      'Vivamus vehicula nisl sit amet nisi commodo, vitae semper lacus ullamcorper. Praesent sollicitudin ' ||
       'sed urna eget ullamcorper. Nam volutpat est libero, a vulputate lectus facilisis at. Pellentesque ' ||
        'habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam scelerisque ' ||
         'dolor sed mauris suscipit, id dapibus ipsum volutpat. In at bibendum sem. Duis id gravida enim.',
-        '2019-10-15', 'Crafts', '4500', '0', 'https://www.cheapdisabilityaids.co.uk/ekmps/shops/podcmedia/images/humming-top-1217-1-p.jpg',
+        '2019-10-15', 'Crafts', '4500', 'https://www.cheapdisabilityaids.co.uk/ekmps/shops/podcmedia/images/humming-top-1217-1-p.jpg',
         'abi@example.com'),
     ('Animal Abstraction Canvas Painting', 'A project that nobody really heard of. ' ||
      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet bibendum nibh. Donec ' ||
@@ -52,7 +51,7 @@ INSERT INTO projects
            'commodo nunc, at consequat orci. Pellentesque a massa et orci pulvinar fermentum. Duis tincidunt ' ||
             'congue odio, ut auctor enim euismod a. Duis eget sagittis arcu. Praesent eget velit tristique, ' ||
              'viverra urna vel, euismod lacus.',
-        '2019-12-30', 'Arts', '3000', '0', 'https://images-na.ssl-images-amazon.com/images/I/81PXdx-ZTQL._SX466_.jpg',
+        '2019-12-30', 'Arts', '3000', 'https://images-na.ssl-images-amazon.com/images/I/81PXdx-ZTQL._SX466_.jpg',
         'babi@example.com'),
     ('Medical Tissue Pro', 'Medical magical tissue is back! It is a product that nobody really want to use.' ||
       'It uses many variations of passages of Lorem Ipsum available, but the majority have suffered alteration ' ||
@@ -63,7 +62,7 @@ INSERT INTO projects
            '200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which ' ||
             'looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, ' ||
              'or non-characteristic words etc.',
-        '2020-10-22', 'Arts', '75300', '0', 'https://timedotcom.files.wordpress.com/2018/11/vaev-sick-tissue-02.jpg',
+        '2020-10-22', 'Arts', '75300', 'https://timedotcom.files.wordpress.com/2018/11/vaev-sick-tissue-02.jpg',
         'cabi@example.com'),
     ('Headphone Jack For Iphone', 'Headphone jack is back! Jack is a product that nobody really want to use.' ||
       'It uses many variations of passages of Lorem Ipsum available, but the majority have suffered alteration ' ||
@@ -74,7 +73,7 @@ INSERT INTO projects
            '200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which ' ||
             'looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, ' ||
              'or non-characteristic words etc.',
-        '2020-10-22', 'Electronics', '10000', '0', 'https://images-na.ssl-images-amazon.com/images/I/61hXtN5cO7L._SX425_.jpg',
+        '2020-10-22', 'Electronics', '10000', 'https://images-na.ssl-images-amazon.com/images/I/61hXtN5cO7L._SX425_.jpg',
         'cabi@example.com'),
     ('Book Boom Speaker', 'Boom Boom Speaker is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -85,7 +84,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2020-10-22', 'Electronics', '4000', '0', 'https://hnsfpau.imgix.net/5/images/detailed/95/all-colours.png?fit=fill&bg=0FFF&w=1500&h=844&auto=format,compress',
+        '2020-10-22', 'Electronics', '4000', 'https://hnsfpau.imgix.net/5/images/detailed/95/all-colours.png?fit=fill&bg=0FFF&w=1500&h=844&auto=format,compress',
         'abi@example.com'),
     ('Clown of the Night', 'Clown is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -96,7 +95,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2020-10-22', 'Arts', '3000', '0', 'https://cdn.britannica.com/98/196498-131-14B78278/Pennywise-Bill-Skarsgard-film-adaptation-novel-Stephen.jpg',
+        '2020-10-22', 'Arts', '3000', 'https://cdn.britannica.com/98/196498-131-14B78278/Pennywise-Bill-Skarsgard-film-adaptation-novel-Stephen.jpg',
         'test@test.com'),
     ('Triathlete Mouse', 'Tri-mouse is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -107,72 +106,72 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2021-10-22', 'Electronics', '5000', '0', 'https://static.techspot.com/images2/news/bigimage/2016/08/2016-08-31-image-4.png',
+        '2021-10-22', 'Electronics', '5000',  'https://static.techspot.com/images2/news/bigimage/2016/08/2016-08-31-image-4.png',
         'test@test.com');
 
 INSERT INTO rewards
-    (project_name, reward_name, reward_pledge_amount, reward_description, reward_tier_id) VALUES
-    ('Spinning Table Top', 'Thank You Note', '200', 'A handwritten thank you useless note.', 1),
+    (project_name, reward_name, reward_pledge_amount, reward_description) VALUES
+    ('Spinning Table Top', 'Thank You Note', '200', 'A handwritten thank you useless note.'),
     ('Spinning Table Top', 'Super Early Bird Spinning Table Top', '1000', 'A spinning table top for your home ' ||
      'Integer accumsan justo quis consectetur molestie. Vivamus vitae purus a arcu rutrum eleifend. Fusce at ' ||
          'molestie id. Quisque pellentesque mi et ex tincidunt eleifend. Pellentesque ac pulvinar erat, sodales ' ||
-          'lacinia enim. Phasellus ullamcorper lacinia justo vitae luctus.', 2),
+          'lacinia enim. Phasellus ullamcorper lacinia justo vitae luctus.'),
     ('Spinning Table Top', 'Early Bird Spinning Table Top', '1200', 'A spinning Table top ' ||
      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque semper blandit est in pellentesque. ' ||
       'In hac habitasse platea dictumst. Sed ut pulvinar libero. Ut mattis gravida tempor. Mauris et vehicula ' ||
        'odio, eu ultricies arcu. Suspendisse rhoncus accumsan purus, eu euismod dui porta ut. Curabitur in ' ||
-        'vulputate ipsum. Praesent sit amet.', 3),
-    ('Spinning Table Top', null, 0, null, 4),
-    ('Animal Abstraction Canvas Painting', 'ART Piece - Lion', '5000', 'Overpriced ART piece (LION) with artist signature.', 1),
-    ('Animal Abstraction Canvas Painting', 'ART Piece - Cat', '3000', 'Overpriced ART piece (CAT) with artist signature.', 2),
-    ('Animal Abstraction Canvas Painting', 'ART Piece - Mermaid', '15000', 'Overpriced ART piece (MERMAID) with artist signature.', 3),
-    ('Animal Abstraction Canvas Painting', null, 0, null, 4),
-    ('Medical Tissue Pro', 'Used Tissue', '100', 'One box of used tissue for medical testing purposes.', 1),
-    ('Medical Tissue Pro', 'Used Tissue (with flu)', '150', 'One box of used tissue (with flu) for medial testing purposes.', 2),
+        'vulputate ipsum. Praesent sit amet.'),
+    ('Spinning Table Top', null, 0, null),
+    ('Animal Abstraction Canvas Painting', 'ART Piece - Lion', '5000', 'Overpriced ART piece (LION) with artist signature.'),
+    ('Animal Abstraction Canvas Painting', 'ART Piece - Cat', '3000', 'Overpriced ART piece (CAT) with artist signature.'),
+    ('Animal Abstraction Canvas Painting', 'ART Piece - Mermaid', '15000', 'Overpriced ART piece (MERMAID) with artist signature.'),
+    ('Animal Abstraction Canvas Painting', null, 0, null),
+    ('Medical Tissue Pro', 'Used Tissue', '100', 'One box of used tissue for medical testing purposes.'),
+    ('Medical Tissue Pro', 'Used Tissue (with flu)', '150', 'One box of used tissue (with flu) for medial testing purposes.'),
     ('Medical Tissue Pro', 'Used Tissue (with chronic disease)', '1000', 'One box of used tissue (with chronic disease) ' ||
-     'for medial testing purposes.', 3),
-    ('Medical Tissue Pro', null, 0, null, 4),
-    ('Headphone Jack For Iphone', 'Used Tissue', '100', 'One box of used tissue to wipe your tears while you think about your old friend jack.', 1),
-    ('Headphone Jack For Iphone', null, 0, null, 2),
+     'for medial testing purposes.'),
+    ('Medical Tissue Pro', null, 0, null),
+    ('Headphone Jack For Iphone', 'Used Tissue', '100', 'One box of used tissue to wipe your tears while you think about your old friend jack.'),
+    ('Headphone Jack For Iphone', null, 0, null),
     ('Book Boom Speaker', 'Super Early Bird Boom Speaker', '500', 'One Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 1),
+         'varius luctus.'),
     ('Book Boom Speaker', 'Early Bird Boom Speaker', '530', 'One Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 2),
+         'varius luctus.'),
     ('Book Boom Speaker', 'Bird Boom Speaker', '550', 'One Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 3),
+         'varius luctus.'),
     ('Book Boom Speaker', 'Family Set - 3 x Boom Speaker', '2000', 'Three sets of Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 4),
-    ('Book Boom Speaker', null, 0, null, 5),
+         'varius luctus.'),
+    ('Book Boom Speaker', null, 0, null),
     ('Clown of the Night', 'Family Set - 3 x Clown Mask', '100', 'Three sets of Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 1),
-    ('Clown of the Night', null, 0, null, 2),
+         'varius luctus.'),
+    ('Clown of the Night', null, 0, null),
     ('Triathlete Mouse', 'Family Set - 3 x Mouse', '90', 'Three sets of Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
-         'varius luctus.', 1),
-    ('Triathlete Mouse', null, 0, null, 2);
+         'varius luctus.'),
+    ('Triathlete Mouse', null, 0, null);
 
 
 INSERT INTO updates
