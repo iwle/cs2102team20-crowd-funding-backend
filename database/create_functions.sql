@@ -14,9 +14,9 @@ BEGIN
         UPDATE Wallets
             SET amount = (SELECT amount - backs_amount FROM Wallets WHERE email=user_email) 
             WHERE Wallets.email=user_email;
-        UPDATE Projects
-            SET project_current_funding = (SELECT project_current_funding + backs_amount FROM Projects WHERE Projects.project_name=project_backed_name)
-            WHERE Projects.project_name=project_backed_name;
+        -- UPDATE Projects
+        --     SET project_current_funding = (SELECT project_current_funding + backs_amount FROM Projects WHERE Projects.project_name=project_backed_name)
+        --     WHERE Projects.project_name=project_backed_name;
 
         /* Insert new transactions */
         INSERT INTO Transactions (amount, transaction_date) VALUES
@@ -189,15 +189,15 @@ BEGIN
                 AND T.transaction_id = backed_transaction_id)
             WHERE Wallets.email=user_email;
 
-        UPDATE Projects
-            SET project_current_funding = (
-                SELECT P.project_current_funding - T.amount
-                FROM Transactions T
-                    NATURAL JOIN BackingFunds B
-                    JOIN projects P ON B.project_name = P.project_name 
-                WHERE Projects.project_name=project_backed_name
-                AND T.transaction_id = backed_transaction_id)
-            WHERE Projects.project_name=project_backed_name;
+        -- UPDATE Projects
+        --     SET project_current_funding = (
+        --         SELECT P.project_current_funding - T.amount
+        --         FROM Transactions T
+        --             NATURAL JOIN BackingFunds B
+        --             JOIN projects P ON B.project_name = P.project_name 
+        --         WHERE Projects.project_name=project_backed_name
+        --         AND T.transaction_id = backed_transaction_id)
+        --     WHERE Projects.project_name=project_backed_name;
 
         /* Remove from BackingFunds */
         DELETE FROM BackingFunds
@@ -254,13 +254,13 @@ BEGIN
                         WHERE W.email = OT.email)
         WHERE Wallets.email=user_email;
 
-    /* Reduce current funding displayed on Project */
-    UPDATE Projects
-        SET project_current_funding = (
-            SELECT P.project_current_funding - OT.amount
-            FROM projects AS P, old_transaction_backing AS OT
-            WHERE P.project_name = project_backed_name)
-        WHERE Projects.project_name = project_backed_name;
+    -- /* Reduce current funding displayed on Project */
+    -- UPDATE Projects
+    --     SET project_current_funding = (
+    --         SELECT P.project_current_funding - OT.amount
+    --         FROM projects AS P, old_transaction_backing AS OT
+    --         WHERE P.project_name = project_backed_name)
+    --     WHERE Projects.project_name = project_backed_name;
 
     /* Remove from BackingFunds */
     DELETE FROM BackingFunds
