@@ -26,7 +26,7 @@ router.post("/", function(req, res, next) {
   /* --- Query: Insertion into Projects --- */
   const queryProjects =
     "INSERT INTO projects (project_name, project_description, project_deadline, " +
-    "project_category, project_funding_goal, project_current_funding, project_image_url, email, project_created_timestamp) VALUES ('" +
+    "project_category, project_funding_goal, project_image_url, email, project_created_timestamp) VALUES ('" +
     projectName +
     "', '" +
     projectDescription +
@@ -36,7 +36,7 @@ router.post("/", function(req, res, next) {
     projectCategory +
     "', '" +
     projectFundingGoal +
-    "', '0', '" +
+    "', '" +
     projectImageUrl +
     "','" +
     creatorEmail +
@@ -45,33 +45,32 @@ router.post("/", function(req, res, next) {
   console.log(queryProjects);
   /* --- Query: Insertion into Rewards --- */
   var queryRewards =
-    "INSERT INTO rewards (project_name, reward_name, reward_pledge_amount, reward_description, " +
-    "reward_tier_id) VALUES ";
+    "INSERT INTO rewards (project_name, reward_name, reward_pledge_amount, reward_description) VALUES ";
   var i = 0;
   for (; i < projectRewards.length; ) {
     let reward = projectRewards[i];
-    queryRewards +=
-      "('" +
-      projectName +
-      "','" +
-      reward.rewardName +
-      "','" +
-      reward.rewardPledgeAmount +
-      "','" +
-      reward.rewardDescription +
-      "','" +
-      ++i +
-      "'),";
+    queryRewards += `('${projectName}', '${reward.rewardName}', '${reward.rewardPledgeAmount}', '${reward.rewardDescription}'),`;
+      // "('" +
+      // projectName +
+      // "','" +
+      // reward.rewardName +
+      // "','" +
+      // reward.rewardPledgeAmount +
+      // "','" +
+      // reward.rewardDescription +
+      // "');";
+    ++i;
   }
-    queryRewards +=
-        "('" +
-        projectName +
-        "', null ,'" +
-        0 +
-        "', null,'" +
-        ++i +
-        "'),";
+    queryRewards += `('${projectName}', null, 0, null),`
+        // "('" +
+        // projectName +
+        // "', null ,'" +
+        // 0 +
+        // "', null" +
+        // ");";
   queryRewards = queryRewards.substr(0, queryRewards.length - 1);
+
+  console.log(queryRewards);
 
   /* --- Final Query: Function to insert into Projects and Rewards. At the end, invoke function itself --- */
   var finalQuery = `CREATE OR REPLACE FUNCTION createProject ()
