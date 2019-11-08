@@ -107,7 +107,7 @@ router.put("/", function(req, res, next) {
 });
 */
 
-router.get("/", function(req, res, next) {
+router.get("/:projectName", function(req, res, next) {
   const query = "SELECT project_name FROM projects";
   pool.query(query, (error, data) => {
     if (error) {
@@ -118,5 +118,20 @@ router.get("/", function(req, res, next) {
     }
   });
 });
+
+router.put("/:oldProjectName", function(req, res, next) {
+  const query = "UPDATE projects SET project_name = " + "'" + req.body.projectName +
+      "' , project_description = '" + req.body.projectDescription + "' , project_category = '"
+      + req.body.projectCategory + "' , project_image_url = '" + req.body.projectImageUrl + "'"
+      + " WHERE project_name = '" + req.body.oldProjectName + "'";
+  console.log(query)
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.status(500).send("Failed to update project.");
+    } else {
+      res.status(200).send("Success");
+    }
+  })
+})
 
 module.exports = router;
