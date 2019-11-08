@@ -89,7 +89,7 @@ AS $$ BEGIN
         JOIN (
             SELECT P.project_name, transaction_id FROM Projects P
                 JOIN BackingFunds B ON B.project_name = P.project_name
-            WHERE project_funding_goal <= project_current_funding) AS Q
+            WHERE project_funding_goal <= project_current_funding(P.project_name)) AS Q
         ON T.transaction_id = Q.transaction_id
         GROUP BY Q.project_name;
 END; $$
