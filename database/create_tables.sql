@@ -72,14 +72,16 @@ CREATE TABLE Transactions (
 
 CREATE TABLE TopUpFunds (
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
-    email varchar(255) REFERENCES Users(email)
+    email varchar(255) REFERENCES Users(email),
+    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
 );
 
 
 CREATE TABLE TransferFunds (
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
     email_transferer varchar(255) REFERENCES Users(email),
-    email_transfee varchar(255) REFERENCES Users(email)
+    email_transfee varchar(255) REFERENCES Users(email),
+    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
 );
 
 CREATE TABLE BackingFunds(
@@ -88,7 +90,8 @@ CREATE TABLE BackingFunds(
     project_name varchar(255) REFERENCES Projects(project_name),
     reward_name varchar(255),
     FOREIGN KEY (project_name, reward_name) REFERENCES Rewards(project_name, reward_name),
-    CONSTRAINT backingfunds_constrant UNIQUE(email, project_name, reward_name)
+    CONSTRAINT backingfunds_constrant UNIQUE(email, project_name, reward_name),
+    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
 );
 
 
