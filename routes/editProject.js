@@ -129,9 +129,24 @@ router.put("/:oldProjectName", function(req, res, next) {
     if (error) {
       res.status(500).send("Failed to update project.");
     } else {
-      res.status(200).send("Success");
+      res.status(200).send("Success update project");
     }
   })
 })
+
+router.put("/updateReward", function(req, res, next) {
+  const query = "UPDATE rewards SET reward_name = " + "'" + req.body.rewardName
+      + "', reward_description = '" + req.body.rewardDescription + "' "
+      + " WHERE project_name = '" + req.body.projectName + "' AND reward_name = '" + req.body.oldRewardName + "'";
+  console.log(query)
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.status(500).send("Failed to update reward.");
+    } else {
+      res.status(200).send("Success update reward");
+    }
+  })
+})
+
 
 module.exports = router;

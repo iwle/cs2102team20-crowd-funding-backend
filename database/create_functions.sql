@@ -228,13 +228,24 @@ DECLARE
 BEGIN
     /* Find previous transaction backing that is related to the project and reward intended to unback. */
     DROP TABLE IF EXISTS old_transaction_backing;
-    CREATE TEMP TABLE old_transaction_backing AS
-    SELECT T.transaction_id, T.amount, B.email
-        FROM transactions AS T, backingfunds AS B
-        WHERE T.transaction_id = B.transaction_id
-            AND B.email = user_email
-            AND B.project_name = project_backed_name
-            AND B.reward_name = reward_backed_name;
+
+    IF (reward_backed_name IS NULL) THEN
+        CREATE TEMP TABLE old_transaction_backing AS
+        SELECT T.transaction_id, T.amount, B.email
+            FROM transactions AS T, backingfunds AS B
+            WHERE T.transaction_id = B.transaction_id
+                AND B.email = user_email
+                AND B.project_name = project_backed_name
+                AND B.reward_name IS NULL;
+    ELSE
+        CREATE TEMP TABLE old_transaction_backing AS
+        SELECT T.transaction_id, T.amount, B.email
+            FROM transactions AS T, backingfunds AS B
+            WHERE T.transaction_id = B.transaction_id
+                AND B.email = user_email
+                AND B.project_name = project_backed_name
+                AND B.reward_name = reward_backed_name;
+    END IF;
 
     /* Create new transaction */
     /* Handle transfer of credit from project back to user */
@@ -405,3 +416,31 @@ GROUP BY T1.email);
 
 END; $$
 LANGUAGE PLPGSQL;
+
+-- Function to get all the rewards backed by the backer on a project
+CREATE OR REPLACE FUNCTION collectRefunds(
+   backer_email VARCHAR(255),
+   backed_project_name VARCHAR(255)
+) RETURNS numeric
+AS $$
+DECLARE
+    rec RECORD;
+    current_amount numeric := 0;
+    total_refund numeric := 0;
+BEGIN
+    FOR rec IN
+        SELECT *
+          FROM Transactions NATURAL JOIN BackingFunds
+          WHERE email = backer_email AND project_name = backed_project_name
+          ORDER BY reward_name ASC
+
+    LOOP
+        /* RAISE NOTICE 'Looping: %', rec.reward_name; */
+        /* perform unback on each of them */
+        /*total_refund := total_refund + rec.amount;*/
+        PERFORM unbacks(rec.project_name, rec.reward_name, rec.email);
+    END LOOP;
+
+    return total_refund;
+END;
+$$ LANGUAGE plpgsql;

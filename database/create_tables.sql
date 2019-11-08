@@ -85,7 +85,7 @@ CREATE TABLE TransferFunds (
 );
 
 CREATE TABLE BackingFunds(
-    transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
+    transaction_id integer REFERENCES Transactions(transaction_id) ON UPDATE CASCADE ON DELETE CASCADE,
     email varchar(255) REFERENCES Users(email),
     project_name varchar(255) REFERENCES Projects(project_name),
     reward_name varchar(255),
