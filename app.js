@@ -40,6 +40,7 @@ var createRouter = require("./routes/create");
 var projectRouter = require("./routes/project");
 var profileRouter = require("./routes/profile");
 var editProjectRouter = require("./routes/editProject");
+var editRewardRouter = require("./routes/editReward");
 
 var app = express();
 
@@ -61,6 +62,7 @@ app.use("/projects", projectRouter);
 app.use("/profile", profileRouter);
 app.use("/search", searchRouter);
 app.use("/editProject", editProjectRouter);
+app.use("/editReward", editRewardRouter);
 
 /* --- V2: Adding Web Pages --- */
 app.use("/about", aboutRouter);

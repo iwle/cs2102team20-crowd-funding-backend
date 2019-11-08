@@ -28,6 +28,34 @@ router.get("/:name", function(req, res, next) {
   });
 });
 
+router.get("/currentFunding/:name", function(req, res, next) {
+  const query =
+      `SELECT * FROM project_current_funding('${req.params.name.split("_").join(" ")}')`;
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.status(500).send("Internal server error when retrieving project");
+    } else {
+      res.status(200).send(data.rows[0]);
+    }
+  });
+});
+
+// Function to donate
+router.put("/collectRefund", function(req, res) {
+  const query = `SELECT * FROM collectRefunds('${req.body.backer_email}', '${req.body.project_name}')`;
+  console.log(query)
+  pool.query(query, (error, data) => {
+    if (error) {
+      console.log(error);
+      res
+          .status(500)
+          .send("Internal server error when donating" + error);
+    } else {
+      res.status(200).send(res.data);
+    }
+  });
+});
+
 router.get("/:name/backers", function(req, res, next) {
   const query =
     "SELECT * FROM backingfunds WHERE project_name = " +

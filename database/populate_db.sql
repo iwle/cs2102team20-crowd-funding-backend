@@ -29,7 +29,7 @@ CALL register('babi@example.com', 'Babi Dabhi', '91919293', 'stringpass_babi', l
 CALL register('cabi@example.com', 'Cabi Dabhi', '91919294', 'stringpass_cabi', localtimestamp - interval '38 days', localtimestamp - interval '2 days');
 CALL register('test@test.com', 'Test Man', '9', 'test');
 
-UPDATE Wallets SET amount = 10000;
+UPDATE Wallets SET amount = 100000;
 
 INSERT INTO projects
     (project_name, project_description, project_deadline,
@@ -132,6 +132,8 @@ INSERT INTO rewards
     ('Medical Tissue Pro', 'Used Tissue (with chronic disease)', '1000', 'One box of used tissue (with chronic disease) ' ||
      'for medial testing purposes.', 3),
     ('Medical Tissue Pro', null, 0, null, 4),
+    ('Headphone Jack For Iphone', 'Used Tissue', '100', 'One box of used tissue to wipe your tears while you think about your old friend jack.', 1),
+    ('Headphone Jack For Iphone', null, 0, null, 2),
     ('Book Boom Speaker', 'Super Early Bird Boom Speaker', '500', 'One Boom Speaker that changes your life. ' ||
      'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
       'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
@@ -219,7 +221,10 @@ INSERT INTO comments
 
 -- Insert Transactions and Backings
 SELECT backs('test@test.com', 'Animal Abstraction Canvas Painting', 'ART Piece - Lion', 5000);
+SELECT backs('test@test.com', 'Medical Tissue Pro', 'Used Tissue', 5000);
 SELECT backs('test@test.com', 'Medical Tissue Pro', 'Used Tissue (with flu)', 5000);
+SELECT backs('test@test.com', 'Medical Tissue Pro', 'Used Tissue (with chronic disease)', 5000);
+SELECT backs('test@test.com', 'Medical Tissue Pro', null, 200);
 SELECT backs('abi@example.com', 'Medical Tissue Pro', 'Used Tissue (with flu)', 3000);
 SELECT backs('abi@example.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
 SELECT backs('test@test.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
