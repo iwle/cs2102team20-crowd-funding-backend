@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS Searches CASCADE;
 DROP TABLE IF EXISTS Searchhistory CASCADE;
 DROP TABLE IF EXISTS Topupfunds CASCADE;
 DROP TABLE IF EXISTS Transactions CASCADE;
-DROP TABLE IF EXISTS Transactions_Transaction_Id_Sq CASCADE;
 DROP TABLE IF EXISTS Transferfunds CASCADE;
 DROP TABLE IF EXISTS Updates CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
@@ -30,12 +29,11 @@ CREATE TABLE Projects (
     project_description text,
     project_deadline timestamp,
     project_category varchar(255),
-    project_funding_goal integer ,
-    project_current_funding integer DEFAULT 0,
+    project_funding_goal integer,
     project_image_url varchar(255),
     email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
     project_created_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT positive_goal CHECK(project_funding_goal > 0)
+    CONSTRAINT positive_goal CHECK(project_funding_goal > 1000)
 );
 
 CREATE TABLE Rewards (
@@ -43,25 +41,21 @@ CREATE TABLE Rewards (
     reward_name varchar(255),
     reward_pledge_amount numeric(20,2) DEFAULT 0,
     reward_description text,
-    reward_tier_id int,
     CONSTRAINT
       project_tier_constraint1
-      UNIQUE(project_name, reward_name),
-    CONSTRAINT
-      project_tier_constraint2
-      UNIQUE(project_name, reward_tier_id)
+      UNIQUE(project_name, reward_name)
 );
 
 CREATE TABLE Follows (
-    follower_id varchar(255) REFERENCES Users(email),
-    following_id varchar(255) REFERENCES Users(email),
-    CONSTRAINT follows_constraint PRIMARY KEY(follower_id, following_id)
+    follower_id varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
+    following_id varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
+    CONSTRAINT follows_constraint UNIQUE(follower_id, following_id)
 );
 
 CREATE TABLE Likes (
-    email varchar(255) REFERENCES Users(email),
-    project_name varchar(255) REFERENCES Projects(project_name),
-    CONSTRAINT likes_constraint PRIMARY KEY(email, project_name)
+    email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
+    project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
+    CONSTRAINT likes_constraint  UNIQUE(email, project_name)
 );
 
 CREATE TABLE Transactions (
@@ -73,7 +67,7 @@ CREATE TABLE Transactions (
 CREATE TABLE TopUpFunds (
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
     email varchar(255) REFERENCES Users(email),
-    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
+    CONSTRAINT unique_transaction_id_constraint_topupfunds UNIQUE(transaction_id)
 );
 
 
@@ -81,7 +75,7 @@ CREATE TABLE TransferFunds (
     transaction_id integer REFERENCES Transactions(transaction_id) ON DELETE CASCADE,
     email_transferer varchar(255) REFERENCES Users(email),
     email_transfee varchar(255) REFERENCES Users(email),
-    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
+    CONSTRAINT unique_transaction_id_constraint_transferfunds UNIQUE(transaction_id)
 );
 
 CREATE TABLE BackingFunds(
@@ -91,15 +85,14 @@ CREATE TABLE BackingFunds(
     reward_name varchar(255),
     FOREIGN KEY (project_name, reward_name) REFERENCES Rewards(project_name, reward_name),
     CONSTRAINT backingfunds_constrant UNIQUE(email, project_name, reward_name),
-    CONSTRAINT unique_transaction_id UNIQUE(transaction_id)
+    CONSTRAINT unique_transaction_id_constraint_backingfunds UNIQUE(transaction_id)
 );
 
 
 CREATE TABLE Creates (
-    project_name varchar(255) REFERENCES Projects(project_name),
+    project_name varchar(255) REFERENCES Projects(project_name) UNIQUE,
     email varchar(255) REFERENCES Users(email),
-    create_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT creates_constraint UNIQUE(project_name, create_date)
+    create_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE SearchHistory (
