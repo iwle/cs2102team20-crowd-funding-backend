@@ -36,35 +36,6 @@ router.get("/", function(req, res, next) {
   });
 });
 
-// router.post("/insert", function(req, res, next) {
-//   var name = req.body.name;
-//   var email = req.body.email;
-//   var contact = req.body.contact;
-//   var password = req.body.password;
-
-//   var query =
-//     "INSERT INTO Users(email, full_name, phone_number, password_hash) VALUES ('" +
-//     +"'" +
-//     name +
-//     "', '" +
-//     email +
-//     "', " +
-//     "'" +
-//     contact +
-//     "', " +
-//     "'" +
-//     password +
-//     "');";
-
-//   pool.query(query, (error, data) => {
-//     if (error) {
-//       res.send(query);
-//     } else {
-//       res.send("HELLOLLSL:Dkslasdasld");
-//     }
-//   });
-// });
-
 router.post("/register", function(req, res, next) {
   var name = req.body.name;
   var email = req.body.email;
@@ -79,6 +50,28 @@ router.post("/register", function(req, res, next) {
       res.send(error);
     } else {
       res.send("success");
+    }
+  });
+});
+
+router.get("/featuredbackers", function(req, res, next) {
+  var query = "SELECT * FROM get_featured_backers();";
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data.rows);
+    }
+  });
+});
+
+router.get("/featuredcreators", function(req, res, next) {
+  var query = "SELECT * FROM get_featured_creators();";
+  pool.query(query, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data.rows);
     }
   });
 });

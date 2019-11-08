@@ -27,18 +27,18 @@ LANGUAGE PLPGSQL;
 3.  Backed at least 5 projects in the past month*/
 
 CREATE OR REPLACE FUNCTION get_featured_backers()
-    RETURNS TABLE(backer varchar(255), followers bigint, amount bigint)
+    RETURNS TABLE(backer varchar(255), followers bigint, amount numeric)
 AS $$ BEGIN 
 RETURN QUERY
 
     SELECT * FROM getAllFollowers() T1 NATURAL JOIN 
-    (SELECT T1.user_id, SUM(amount) FROM
+    (SELECT T1.user_id, SUM(T2.amount) FROM
     (SELECT * FROM getAllFollowers() as T1 where T1.followers >= 100) T1
     LEFT JOIN (BackingFunds NATURAL JOIN Transactions) T2 
     ON T1.user_id = T2.email
     AND (LOCALTIMESTAMP - T2.transaction_date) <= interval '30 days'
     GROUP BY T1.user_id 
-    HAVING SUM(amount) >= 500 AND COUNT(DISTINCT project_name)>=5) T2 
+    HAVING SUM(T2.amount) >= 500 AND COUNT(DISTINCT project_name)>=5) T2 
     LIMIT 3;
     
 END; $$
@@ -50,7 +50,7 @@ LANGUAGE PLPGSQL;
 2. On average more than 500 likes
 3. Has projects in at least 3 different categories*/
 
-CREATE OR REPLACE FUNCTION top3_featured_creators ()
+CREATE OR REPLACE FUNCTION get_featured_creators ()
     RETURNS TABLE(creator varchar(255), projects bigint, categories bigint, likes bigint)
 
 AS $$ BEGIN
