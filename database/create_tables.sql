@@ -99,7 +99,7 @@ CREATE TABLE Creates (
     project_name varchar(255) REFERENCES Projects(project_name),
     email varchar(255) REFERENCES Users(email),
     create_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT creates_constraint PRIMARY KEY(email, project_name)
+    CONSTRAINT creates_constraint UNIQUE(project_name, create_date)
 );
 
 CREATE TABLE SearchHistory (
