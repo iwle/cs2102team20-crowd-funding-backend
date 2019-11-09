@@ -20,7 +20,7 @@ CREATE TABLE Users (
 	full_name varchar(255) NOT NULL,
     phone_number varchar(255) NOT NULL UNIQUE,
     password_hash varchar(255) NOT NULL,
-    user_created_timestamp timestamp NOT NULL,
+    user_created_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_last_login_timestamp timestamp NOT NULL
 );
 
@@ -96,7 +96,7 @@ CREATE TABLE Creates (
 );
 
 CREATE TABLE SearchHistory (
-    search_timestamp timestamp,
+    search_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     search_text varchar(255),
     email varchar(255) REFERENCES Users(email),
     PRIMARY KEY(email,search_timestamp)
@@ -104,7 +104,7 @@ CREATE TABLE SearchHistory (
 
 CREATE TABLE Searches (
     email varchar(255) REFERENCES Users(email) ON DELETE CASCADE,
-    search_timestamp timestamp,
+    search_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (email,search_timestamp) REFERENCES SearchHistory(email,search_timestamp),
     CONSTRAINT
         unique_search
@@ -150,7 +150,7 @@ CREATE TABLE Updates (
     project_name varchar(255) REFERENCES Projects(project_name) ON DELETE CASCADE,
     update_title text,
     update_description text,
-    update_time timestamp,
+    update_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT
       project_update_constraint1

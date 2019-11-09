@@ -42,6 +42,7 @@ var profileRouter = require("./routes/profile");
 var editProjectRouter = require("./routes/editProject");
 var editRewardRouter = require("./routes/editReward");
 var feedbackRouter = require("./routes/feedback");
+var updateRouter = require("./routes/updates");
 
 var app = express();
 
@@ -65,6 +66,7 @@ app.use("/search", searchRouter);
 app.use("/editProject", editProjectRouter);
 app.use("/editReward", editRewardRouter);
 app.use("/feedback", feedbackRouter);
+app.use("/update", updateRouter);
 
 /* --- V2: Adding Web Pages --- */
 app.use("/about", aboutRouter);
