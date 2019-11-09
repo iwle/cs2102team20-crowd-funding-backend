@@ -15,7 +15,9 @@ pool.connect();
 router.get("/:email", function(req, res, next) {
     const query = `SELECT T1.project_name, T1.feedback_text, T1.rating_number,
      T1.feedback_date, T1.email 
-     FROM feedbacks T1 INNER JOIN projects T2 ON T1.project_name = T2.project_name WHERE T2.email = ${req.params.email};`;
+     FROM feedbacks T1 INNER JOIN projects T2 ON T1.project_name = T2.project_name WHERE T2.email = '${req.params.email}';`;
+
+     console.log(query);
     pool.query(query, (error, data) => {
       if (error) {
         console.log(error);
@@ -44,3 +46,4 @@ router.get("/:email", function(req, res, next) {
     });
   });
   
+  module.exports = router;
