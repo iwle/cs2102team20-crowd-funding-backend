@@ -460,7 +460,7 @@ $$ LANGUAGE plpgsql;
 -- Function to get all the project funding status
 CREATE OR REPLACE FUNCTION projectFundingStatus()
 RETURNS TABLE (project_name varchar(255), email varchar(255), project_description text, project_image_url varchar(255), project_deadline timestamp, project_funding_goal integer,
-ended boolean, project_funding_received integer)
+ended boolean, project_funding_received integer, received_funding_after_deadline boolean, funding_received_after_deadline_is_valid boolean)
 AS $$
 BEGIN
     DROP TABLE IF EXISTS temporaryprojects;
@@ -469,7 +469,9 @@ BEGIN
     UPDATE temporaryprojects
         SET
             ended = (deadline < current_timestamp),
-            current_funding = project_current_funding(temporaryprojects.project_name);
+            current_funding = project_current_funding(temporaryprojects.project_name),
+            received_funding_after_deadline = transactionAfterDeadlineExist(temporaryprojects.project_name),
+            funding_received_after_deadline_is_valid = transactionAfterDeadlineIsValid(temporaryprojects.project_name);
 
     RETURN QUERY SELECT * FROM temporaryprojects;
 END; $$
@@ -477,11 +479,13 @@ LANGUAGE PLPGSQL;
 
 CREATE OR REPLACE FUNCTION projectsStatusTemplate()
 RETURNS TABLE (project_name varchar(255), email varchar(255), project_description text, project_image_url varchar(255), deadline timestamp,
-funding_goal integer, ended boolean, current_funding integer)
+funding_goal integer, ended boolean, current_funding integer, received_funding_after_deadline boolean, funding_received_after_deadline_is_valid boolean)
 AS $$
 BEGIN
     RETURN QUERY
-        SELECT P.project_name, P.email, P.project_description, P.project_image_url, P.project_deadline, P.project_funding_goal, false AS ended, 0 AS current_funding
+        SELECT P.project_name, P.email, P.project_description, P.project_image_url, P.project_deadline,
+                P.project_funding_goal, false AS ended, 0 AS current_funding, false AS received_funding_after_deadline,
+                false AS funding_received_after_deadline_is_valid
             FROM Projects AS P;
 END; $$
 LANGUAGE PLPGSQL;
@@ -489,12 +493,13 @@ LANGUAGE PLPGSQL;
 -- Function get all the funding status of projects created by the user
 CREATE OR REPLACE FUNCTION projectsByUser(userEmail varchar(255))
 RETURNS TABLE (project_name varchar(255), email varchar(255), project_description text, project_image_url varchar(255),
-project_deadline timestamp, ended boolean, project_funding_goal integer, project_funding_received integer)
+project_deadline timestamp, ended boolean, project_funding_goal integer, project_funding_received integer, received_funding_after_deadline boolean,
+funding_received_after_deadline_is_valid boolean)
 AS $$
 BEGIN
     RETURN QUERY
         SELECT P.project_name, P.email, P.project_description, P.project_image_url, P.project_deadline,
-            PJS.ended, PJS.project_funding_goal, PJS.project_funding_received
+            PJS.ended, PJS.project_funding_goal, PJS.project_funding_received, PJS.received_funding_after_deadline, PJS.funding_received_after_deadline_is_valid
         FROM projectfundingstatus() AS PJS NATURAL JOIN Projects AS P
         WHERE P.email = userEmail;
 END; $$
@@ -503,13 +508,112 @@ LANGUAGE PLPGSQL;
 -- Function get all the funding status of projects created by the user
 CREATE OR REPLACE FUNCTION projectByName(projectName varchar(255))
 RETURNS TABLE (project_name varchar(255), email varchar(255), project_description text, project_image_url varchar(255),
-project_deadline timestamp, ended boolean, project_funding_goal integer, project_funding_received integer)
+project_deadline timestamp, ended boolean, project_funding_goal integer, project_funding_received integer, received_funding_after_deadline boolean,
+funding_received_after_deadline_is_valid boolean)
 AS $$
 BEGIN
     RETURN QUERY
         SELECT P.project_name, P.email, P.project_description, P.project_image_url, P.project_deadline,
-            PJS.ended, PJS.project_funding_goal, PJS.project_funding_received
+            PJS.ended, PJS.project_funding_goal, PJS.project_funding_received, PJS.received_funding_after_deadline, PJS.funding_received_after_deadline_is_valid
         FROM projectfundingstatus() AS PJS NATURAL JOIN Projects AS P
         WHERE P.project_name = projectName;
+END; $$
+LANGUAGE PLPGSQL;
+
+-- Function (for creator) to check if transaction after deadline for a spcific project exist
+CREATE OR REPLACE FUNCTION transactionAfterDeadlineExist(projectName varchar(255))
+RETURNS boolean
+AS $$
+DECLARE
+    _count integer := 0;
+BEGIN
+    SELECT COUNT(*) INTO _count
+    FROM (
+        SELECT X.backer_email, P.email AS creator_email,
+            X.project_name, X.amount, X.transaction_date, P.project_deadline
+        FROM (
+            SELECT B.email AS backer_email, T.transaction_id, T.transaction_date, B.project_name, T.amount
+            FROM transactions AS T inner join backingfunds AS B ON (T.transaction_id = B.transaction_id)) AS X
+                INNER JOIN Projects AS P ON (X.project_name = P.project_name)
+                WHERE X.project_name = projectName AND X.transaction_date > P.project_deadline) AS Z;
+
+    IF (_count > 0) THEN
+        RETURN true;
+    ELSE
+        RETURN false;
+    END IF;
+END; $$
+LANGUAGE PLPGSQL;
+
+-- Function (for creator) to check if transaction after deadline is equal to total fundings before deadline
+-- Pre-cond: after deadline transaction must have amount that is equal to total of funding amounts right before deadline.
+--              creator email and backer email must be the same.
+--              transaction date must be after project deadline
+CREATE OR REPLACE FUNCTION transactionAfterDeadlineIsValid(projectName varchar(255))
+RETURNS boolean
+AS $$
+DECLARE
+    _count integer := 0;
+BEGIN
+    SELECT COUNT(*) INTO _count FROM (
+        SELECT X.backer_email, P.email AS creator_email,
+            X.project_name, X.amount, X.transaction_date, P.project_deadline
+        FROM (
+            SELECT B.email AS backer_email, T.transaction_id, T.transaction_date, B.project_name, T.amount
+            FROM transactions AS T inner join backingfunds AS B ON (T.transaction_id = B.transaction_id)) AS X
+                INNER JOIN Projects AS P ON (X.project_name = P.project_name)
+                WHERE X.project_name = projectName
+                    AND X.transaction_date > P.project_deadline
+                    AND X.amount = project_current_funding(X.project_name)
+                    AND P.email = X.backer_email
+    ) AS XX;
+
+    IF (_count > 0) THEN
+        RETURN true;
+    ELSE
+        RETURN false;
+    END IF;
+END; $$
+LANGUAGE PLPGSQL;
+
+-- Function transfer funds from holding area (by GoGuru) to Creator.
+CREATE OR REPLACE FUNCTION transferBackingFundsToCreator(
+    creatorEmail varchar(255),
+    projectName varchar(255))
+RETURNS boolean
+AS $$
+DECLARE
+    _is_creator boolean := false;
+    _total_funding integer := 0;
+    _latest_transaction_id integer DEFAULT 0;
+
+BEGIN
+    -- Is creator?
+    SELECT (COUNT(*) > 0) INTO _is_creator FROM Projects WHERE project_name = projectName AND email = creatorEmail;
+    -- Is fully funded?
+    -- Has not collect funds yet?
+
+    SELECT * INTO _total_funding FROM project_current_funding(projectName);
+
+    IF (_is_creator = false) THEN
+        RAISE NOTICE 'IS NOT CREATOR';
+        RETURN false;
+    ELSE
+        RAISE NOTICE 'IS CREATOR';
+        RAISE NOTICE 'FUNDING IS: %', _total_funding;
+        -- create new transaction with new amount, note the transaction id
+        INSERT INTO Transactions (amount, transaction_date) VALUES
+            (_total_funding::numeric(20,2), current_timestamp)
+            RETURNING transaction_id INTO _latest_transaction_id;
+
+        -- Insert new backing funds
+        INSERT INTO BackingFunds (transaction_id, email, project_name, reward_name) VALUES
+            (_latest_transaction_id, creatorEmail, projectName, null);
+
+        -- Update creator wallet
+        UPDATE Wallets SET amount = (amount + _total_funding) WHERE email = creatorEmail;
+
+        RETURN true;
+    END IF;
 END; $$
 LANGUAGE PLPGSQL;

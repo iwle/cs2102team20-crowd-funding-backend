@@ -107,4 +107,19 @@ router.delete("/follows/:followerEmail/:followingEmail", function(req, res, next
     });
 });
 
+// Function to transfer project funds to creator
+router.post("/transferProjectFundsToCreator", function (req, res){
+    const query = `SELECT * FROM transferBackingFundsToCreator('${req.body.creatorEmail}', '${req.body.projectName}')`;
+    pool.query(query, (error, data) => {
+        if (error) {
+            console.log(error);
+            res
+                .status(500)
+                .send(query);
+        } else {
+            res.status(200).send("success transfer of funds");
+        }
+    });
+});
+
 module.exports = router;

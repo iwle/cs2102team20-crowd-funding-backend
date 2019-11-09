@@ -250,10 +250,14 @@ SELECT backs('test@test.com', 'Medical Tissue Pro', 'Used Tissue (with flu)', 50
 SELECT backs('test@test.com', 'Medical Tissue Pro', 'Used Tissue (with chronic disease)', 5000);
 SELECT backs('test@test.com', 'Medical Tissue Pro', null, 200);
 SELECT backs('abi@example.com', 'Medical Tissue Pro', 'Used Tissue (with flu)', 3000);
-SELECT backs('abi@example.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
+SELECT backs('abi@example.com', 'Clown of the Night', 'Family Set - 3 x Mouse', 2000);
 SELECT backs('test@test.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
+--SELECT backs('test@test.com', 'Spinning Table Top', null, 600);
+SELECT backs('abi@example.com', 'Triathlete Mouse', 'Family Set - 3 x Mouse', 90);
+SELECT backs('abi@example.com', 'Triathlete Mouse', null, 3000);
 SELECT backs('babi@example.com', 'Triathlete Mouse', 'Family Set - 3 x Mouse', 90);
 SELECT backs('babi@example.com', 'Triathlete Mouse', null, 5000);
+SELECT backs('test@test.com', 'Triathlete Mouse', 'Transfer from project to creator', 5000);
 
 -- This should fail as Triathelete Mouse is a project that belongs that to feedbacker.
 CALL create_feedback('Triathlete Mouse', 'This is the most awesome project I have ever backed', 4, 'test@test.com');
@@ -271,3 +275,6 @@ SELECT backs('test@test.com', 'Spinning Table Top', 'Super Early Bird Spinning T
 
 -- This should pass now as project has reached funding goal
 CALL create_feedback('Spinning Table Top', 'This is the most awesome project I have ever backed', 3, 'test@test.com');
+
+-- Backtrack time of backing to simulate backing before deadline
+update transactions set transaction_date = '2018-08-22 00:00:05';

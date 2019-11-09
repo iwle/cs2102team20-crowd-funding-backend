@@ -187,8 +187,20 @@ AS $$
 DECLARE
     _current_funding numeric;
 BEGIN
+    /*
     EXECUTE format('SELECT SUM(T.amount) FROM Backingfunds AS B, Transactions AS T' ||
     ' WHERE T.transaction_id = B.transaction_id AND B.project_name = ''%s'';', $1)
+     INTO _current_funding;
+     */
+
+    EXECUTE format('SELECT SUM(Y.amount) ' ||
+     'FROM (' ||
+      'SELECT X.backer_email, P.email AS creator_email, X.project_name, X.amount, X.transaction_date, P.project_deadline ' ||
+       'FROM ( ' ||
+        'SELECT B.email AS backer_email, T.transaction_id, T.transaction_date, B.project_name, T.amount ' ||
+         'FROM transactions AS T inner join backingfunds AS B ON (T.transaction_id = B.transaction_id)) AS X ' ||
+          'INNER JOIN Projects AS P ON (X.project_name = P.project_name) ' ||
+           'WHERE X.project_name = ''%s'' AND X.transaction_date <= P.project_deadline) AS Y;', $1)
      INTO _current_funding;
 
     RETURN _current_funding;
