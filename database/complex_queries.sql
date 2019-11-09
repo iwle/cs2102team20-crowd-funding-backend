@@ -15,7 +15,7 @@ ON project_current_funding(T1.project_name) >= 2 * T1.project_funding_goal
 AND T2.project_name = T1.project_name) T1 LEFT JOIN BackingFunds T2 
 ON T1.project_name = T2.project_name
 GROUP BY T1.project_name 
-HAVING COUNT(DISTINCT T1.liker) >= 100 AND COUNT(DISTINCT T2.email) >= 150; 
+HAVING COUNT(DISTINCT T1.liker) >= 150 AND COUNT(DISTINCT T2.email) >= 100; 
 
 END; $$
 LANGUAGE PLPGSQL;
