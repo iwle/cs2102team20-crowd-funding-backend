@@ -15,10 +15,11 @@ pool.connect();
 
 router.get("/:name", function(req, res, next) {
   const query =
-    "SELECT * FROM projects WHERE project_name = " +
+    "SELECT * FROM projectByName(" +
     "'" +
     req.params.name.split("_").join(" ") +
-    "'";
+    "')";
+  console.log(query);
   pool.query(query, (error, data) => {
     if (error) {
       res.status(500).send("Internal server error when retrieving project");

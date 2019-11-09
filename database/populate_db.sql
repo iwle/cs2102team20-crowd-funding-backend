@@ -95,7 +95,7 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2020-10-22', 'Arts', '3000', 'https://cdn.britannica.com/98/196498-131-14B78278/Pennywise-Bill-Skarsgard-film-adaptation-novel-Stephen.jpg',
+        '2019-10-22', 'Arts', '3000', 'https://cdn.britannica.com/98/196498-131-14B78278/Pennywise-Bill-Skarsgard-film-adaptation-novel-Stephen.jpg',
         'test@test.com'),
     ('Triathlete Mouse', 'Tri-mouse is the world first speaker that boom the boomz. ' ||
      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
@@ -106,7 +106,18 @@ INSERT INTO projects
           'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
            'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
             '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-        '2021-10-22', 'Electronics', '5000',  'https://static.techspot.com/images2/news/bigimage/2016/08/2016-08-31-image-4.png',
+        '2018-10-22', 'Electronics', '5000',  'https://static.techspot.com/images2/news/bigimage/2016/08/2016-08-31-image-4.png',
+        'test@test.com'),
+    ('Foldable Water Bottle', 'Foldy is the world first bottle that boom the boomz. ' ||
+     'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical ' ||
+      'Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at ' ||
+       'Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a ' ||
+        'Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the ' ||
+         'undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et ' ||
+          'Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on ' ||
+           'the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, ' ||
+            '"Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
+        '2020-10-22', 'Crafts', '5000',  'https://ae01.alicdn.com/kf/HTB1fHqwr25TBuNjSspcq6znGFXaZ.jpg',
         'test@test.com');
 
 INSERT INTO rewards
@@ -171,7 +182,21 @@ INSERT INTO rewards
        'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
         'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
          'varius luctus.'),
-    ('Triathlete Mouse', null, 0, null);
+    ('Triathlete Mouse', null, 0, null),
+    ('Foldable Water Bottle', 'Super Early Bird Water Bottle', '600', 'One bottle that changes your life. ' ||
+     'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
+      'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
+       'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
+        'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
+         'varius luctus.'),
+    ('Foldable Water Bottle', 'Early Bird Water Bottle', '650', 'One bottle that changes your life. ' ||
+     'Curabitur dictum lectus a dictum laoreet. Pellentesque vitae tellus leo. Curabitur condimentum lorem ' ||
+      'sit amet vehicula laoreet. Praesent odio elit, pulvinar ut accumsan nec, varius porta augue. Aliquam ' ||
+       'finibus tristique sem, non lobortis turpis rutrum non. Suspendisse nibh massa, auctor non arcu a, ' ||
+        'imperdiet accumsan metus. In vitae quam non sapien auctor mattis. Proin fermentum odio eget arcu ' ||
+         'varius luctus.'),
+    ('Foldable Water Bottle', null, 0, null);
+
 
 
 INSERT INTO updates
@@ -227,6 +252,8 @@ SELECT backs('test@test.com', 'Medical Tissue Pro', null, 200);
 SELECT backs('abi@example.com', 'Medical Tissue Pro', 'Used Tissue (with flu)', 3000);
 SELECT backs('abi@example.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
 SELECT backs('test@test.com', 'Spinning Table Top', 'Early Bird Spinning Table Top', 2000);
+SELECT backs('babi@example.com', 'Triathlete Mouse', 'Family Set - 3 x Mouse', 90);
+SELECT backs('babi@example.com', 'Triathlete Mouse', null, 5000);
 
 -- This should fail as Triathelete Mouse is a project that belongs that to feedbacker.
 CALL create_feedback('Triathlete Mouse', 'This is the most awesome project I have ever backed', 4, 'test@test.com');

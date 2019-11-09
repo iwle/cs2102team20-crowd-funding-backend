@@ -13,9 +13,9 @@ const pool = new Pool({
 
 pool.connect();
 
-/* Return all projects backed by the user. */
+/* Return all projects created by the user. */
 router.get("/:email/createdProjects", function(req, res, next) {
-    const query = "SELECT * FROM Projects WHERE email = " + "'" + req.params.email + "'";
+    const query = "SELECT * FROM ProjectsByUser(" + "'" + req.params.email + "')";
     console.log(query)
     pool.query(query, (error, data) => {
         if (error) {
