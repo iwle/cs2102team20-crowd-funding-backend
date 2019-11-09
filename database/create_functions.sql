@@ -619,6 +619,10 @@ BEGIN
         -- Update creator wallet
         UPDATE Wallets SET amount = (amount + _total_funding) WHERE email = creatorEmail;
 
+        -- Update redeem
+        INSERT INTO Redeem (project_name, email) VALUES
+            (projectName, creatorEmail);
+
         RETURN true;
     END IF;
 END; $$

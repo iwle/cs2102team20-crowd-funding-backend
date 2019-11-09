@@ -156,3 +156,13 @@ CREATE TABLE Updates (
       project_update_constraint1
       UNIQUE(update_time, project_name)
 );
+
+
+CREATE TABLE Redeem (
+    project_name varchar(255) REFERENCES Projects(project_name),
+    email varchar(255) REFERENCES Users(email),
+
+    CONSTRAINT 
+    redeem_constraint
+    UNIQUE(project_name,email)
+);
