@@ -613,8 +613,8 @@ BEGIN
             RETURNING transaction_id INTO _latest_transaction_id;
 
         -- Insert new backing funds
-        INSERT INTO BackingFunds (transaction_id, email, project_name, reward_name) VALUES
-            (_latest_transaction_id, creatorEmail, projectName, null);
+        INSERT INTO TransferFunds (transaction_id, email_transferer, email_transfee) VALUES
+            (_latest_transaction_id, null, creatorEmail);
 
         -- Update creator wallet
         UPDATE Wallets SET amount = (amount + _total_funding) WHERE email = creatorEmail;
