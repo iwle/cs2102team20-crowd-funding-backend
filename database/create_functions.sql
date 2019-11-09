@@ -237,6 +237,7 @@ CREATE OR REPLACE FUNCTION unbacks (
 AS $$
 DECLARE
     backed_transaction_id integer;
+    transfer_back_transaction_id integer;
 BEGIN
     /* Find previous transaction backing that is related to the project and reward intended to unback. */
     DROP TABLE IF EXISTS old_transaction_backing;
@@ -280,7 +281,12 @@ BEGIN
 
     /* Create new transaction for this unback action */
     INSERT INTO Transactions (amount, transaction_date) VALUES
-        (((SELECT -OT.amount FROM old_transaction_backing AS OT))::numeric(20,2), current_timestamp);
+        (((SELECT OT.amount FROM old_transaction_backing AS OT))::numeric(20,2), current_timestamp)
+        RETURNING transaction_id into transfer_back_transaction_id;
+    
+    /* Create new transfer to represent transfer back to user */
+    INSERT INTO TransferFunds (transaction_id, email_transferer, email_transfee) VALUES
+        (transfer_back_transaction_id, null, user_email);
     RETURN true;
 
     /* No need to insert into backingfunds */
